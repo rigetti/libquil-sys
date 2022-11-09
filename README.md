@@ -19,7 +19,8 @@ SBCL must be installed from source to make sure you have the `libsbcl` shared li
 
 **Important**: The above `sbcl` folder must **not** be in the workspace folder -- it will cause issues.
 
-1. Crate a folder to hold the lisp projects (hereafter: `$LISP_WORKSPACE`)
+1. Create a folder to hold the lisp projects (hereafter: `$LISP_WORKSPACE`)
+    - Whenever you see `$LISP_WORKSPACE` below, be sure to use the actual path instead.
 2. Clone the following repos into `$LISP_WORKSPACE`
     - <https://github.com/quil-lang/qvm>
     - <https://github.com/quil-lang/magicl>
@@ -45,6 +46,9 @@ SBCL must be installed from source to make sure you have the `libsbcl` shared li
 
 ### Build `quilc`
 
+**Note**: The build commands in `quilc` assume you are running on MacOS and 
+[will error on other systems](https://github.com/quil-lang/quilc/issues/861).
+
 Run the following from `$LISP_WORKSPACE`:
 
 ```bash
@@ -69,6 +73,12 @@ echo "H 0" | quilc/lib/tests/c/compile-quil
 
 From the root of this repository:
 
+1. Edit `build.rs` and replace the hard-coded paths with your local paths:
+  - `cargo:rustc-link-search=$LISP_WORKSPACE/quilc/lib`
+  - `cargo:rerun-if-changed=$LISP_WORKSPACE/quilc/lib/libquilc.h`
+  - `.header("$LISP_WORKSPACE/quilc/lib/libquilc.h")`
+  - Required until #2 gets resolved.
+2. Run the following commands:
 ```bash
 cp "$LISP_WORKSPACE/quilc/lib/libquilc.dylib" .
 cp "$LISP_WORKSPACE/quilc/lib/libquilc.core" .
