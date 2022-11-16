@@ -9,7 +9,8 @@ This crate provides Rust bindings to the [`quilc`](https://github.com/quil-lang/
 SBCL must be installed from source to make sure you have the `libsbcl` shared library available.
 
 1. Install `sbcl` from a package manager *for bootstrapping purposes*.
-2. Clone the repository: `git clone git://git.code.sf.net/p/sbcl/sbcl`
+2. Clone the repository: `git clone --branch sbcl-2.2.0 git://git.code.sf.net/p/sbcl/sbcl`
+  - Tag `sbcl-2.2.0` is known to work. These instructions have not been tested against a newer version.
 3. Inside the cloned repo: `sh make.sh && sh make-shared-library.sh`
 4. Uninstall the package manager version of `sbcl`.
 5. Run `sh install.sh` to install the compiled `sbcl`
@@ -46,7 +47,7 @@ SBCL must be installed from source to make sure you have the `libsbcl` shared li
 
 ### Build `quilc`
 
-**Note**: The build commands in `quilc` assume you are running on MacOS and 
+**Note**: The build commands in `quilc` assume you are running on MacOS and
 [will error on other systems](https://github.com/quil-lang/quilc/issues/861).
 
 Run the following from `$LISP_WORKSPACE`:
@@ -77,7 +78,7 @@ From the root of this repository:
   - `cargo:rustc-link-search=$LISP_WORKSPACE/quilc/lib`
   - `cargo:rerun-if-changed=$LISP_WORKSPACE/quilc/lib/libquilc.h`
   - `.header("$LISP_WORKSPACE/quilc/lib/libquilc.h")`
-  - Required until #2 gets resolved.
+  - Required until [this issue](https://github.com/rigetti/libquil-sys/issues/2) gets resolved.
 2. Run the following commands:
 ```bash
 cp "$LISP_WORKSPACE/quilc/lib/libquilc.dylib" .
