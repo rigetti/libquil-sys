@@ -58,8 +58,6 @@ pub fn compile_program(program: &Program, chip: &Chip) -> Program {
 }
 
 /// Get an arbritrary Chip.
-/// TODO: Add function for building a chip from an ISA
-/// https://github.com/rigetti/libquil-sys/issues/8
 pub fn get_chip() -> Chip {
     init_libquilc();
     let mut chip: chip_specification = std::ptr::null_mut();
