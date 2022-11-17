@@ -13,15 +13,11 @@ fn main() {
             .to_string(),
         ),
     );
-    let quilc_library_path = quilc_library_path.to_string_lossy();
 
     // Tell cargo to look for shared libraries in the specified directory
-    println!("cargo:rustc-link-search={}", quilc_library_path);
+    println!("cargo:rustc-link-search={}", quilc_library_path.display());
 
     println!("cargo:rustc-link-lib=quilc");
-
-    // Tell cargo to invalidate the built crate whenever the wrapper changes
-    println!("cargo:rerun-if-changed={}/libquilc.h", quilc_library_path);
 
     // If this isn't set on MacOS, memory allocation errors occur when trying to initialize the
     // library
@@ -29,13 +25,14 @@ fn main() {
         println!("cargo:rustc-link-arg=-pagezero_size 0x100000");
     }
 
+    let header_path = quilc_library_path.join("libquilc.h");
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
     let bindings = bindgen::Builder::default()
         // The input header we would like to generate
         // bindings for.
-        .header(format!("{}/libquilc.h", quilc_library_path))
+        .header(header_path.to_string_lossy())
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
@@ -46,7 +43,7 @@ fn main() {
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
-    println!("Writing bindings to {}", out_path.to_string_lossy());
+    println!("Writing bindings to {}", out_path.display());
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Should be able to write bindings to file.");
