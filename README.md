@@ -24,7 +24,7 @@ SBCL must be installed from source to make sure you have the `libsbcl` shared li
 
 Quicklisp has a [local projects mechanism](http://blog.quicklisp.org/2018/01/the-quicklisp-local-projects-mechanism.html)
 which we'll be using to build `quilc` with it's dependencies. By default, this directory is `$HOME/quicklisp/local-projects`.
-If you want to use something different, you need to add to make sure `$HOME/.sbclrc` contains the following
+If you want to use something different, you need to make sure `$HOME/.sbclrc` contains the following
 (replace `$LISP_WORKSPACE` with the actual value):
 
 ```lisp
