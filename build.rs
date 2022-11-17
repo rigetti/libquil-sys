@@ -19,6 +19,10 @@ fn main() {
 
     println!("cargo:rustc-link-lib=quilc");
 
+    // Tell cargo to rerun in the libquilc implementation has changed
+    let impl_path = quilc_library_path.join("libquilc.c");
+    println!("cargo:rustc-rerun-if-changed={}", impl_path.display());
+
     // If this isn't set on MacOS, memory allocation errors occur when trying to initialize the
     // library
     if cfg!(target_os = "macos") {
