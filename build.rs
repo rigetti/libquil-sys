@@ -15,7 +15,6 @@ fn main() {
     );
     let quilc_library_path = quilc_library_path.to_string_lossy();
 
-    println!("{}", quilc_library_path);
     // Tell cargo to look for shared libraries in the specified directory
     println!("cargo:rustc-link-search={}", quilc_library_path);
 
@@ -24,7 +23,8 @@ fn main() {
     // Tell cargo to invalidate the built crate whenever the wrapper changes
     println!("cargo:rerun-if-changed={}/libquilc.h", quilc_library_path);
 
-    //
+    // If this isn't set on MacOS, memory allocation errors occur when trying to initialize the
+    // library
     if cfg!(target_os = "macos") {
         println!("cargo:rustc-link-arg=-pagezero_size 0x100000");
     }
