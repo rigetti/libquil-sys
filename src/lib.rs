@@ -2,6 +2,8 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
+use libc::c_char;
+use std::ffi::CStr;
 use std::sync::Once;
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
@@ -57,6 +59,17 @@ pub fn compile_program(program: &Program, chip: &Chip) -> Program {
     Program(compiled_program)
 }
 
+pub fn compile_protoquil(program: &Program, chip: &Chip) -> Program {
+    init_libquilc();
+    let mut compiled_program: quil_program = std::ptr::null_mut();
+
+    unsafe {
+        quilc_compile_protoquil.unwrap()(program.0, chip.0, &mut compiled_program);
+    }
+
+    Program(compiled_program)
+}
+
 /// Get an arbritrary Chip.
 pub fn get_chip() -> Chip {
     init_libquilc();
@@ -74,5 +87,37 @@ pub fn print_program(program: &Program) {
     init_libquilc();
     unsafe {
         quilc_print_program.unwrap()(program.0);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn new_quil_program() -> Program {
+        let sample_quil = r#"
+DECLARE ro BIT[2]
+DECLARE theta REAL
+RX(theta) 0
+X 0
+CNOT 0 1
+MEASURE 0 ro[0]
+MEASURE 1 ro[1]
+    "#
+        .to_string();
+
+        parse_program(sample_quil)
+    }
+
+    #[test]
+    fn test_compile_protoquil() {
+        let program = new_quil_program();
+        let chip = get_chip();
+        compile_protoquil(&program, &chip);
+
+        // Since there is no way to inspect the return compiled program yet,
+        // just make sure the code doesn't panic before getting to this point.
+        // See: https://github.com/rigetti/libquil-sys/issues/12
+        assert!(false)
     }
 }
