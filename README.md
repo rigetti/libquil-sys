@@ -16,22 +16,16 @@ SBCL must be installed from source to make sure you have the `libsbcl` shared li
 5. Run `sh install.sh` to install the compiled `sbcl`
 6. Copy `src/runtime/libsbcl.so` to `/usr/local/lib/libsbcl.so`
 
-### Set up Lisp workspaces
-
-**Important**: The above `sbcl` folder must **not** be in the workspace folder -- it will cause issues.
-
-1. Create a folder to hold the lisp projects (hereafter: `$LISP_WORKSPACE`)
-    - Whenever you see `$LISP_WORKSPACE` below, be sure to use the actual path instead.
-2. Clone the following repos into `$LISP_WORKSPACE`
-    - <https://github.com/quil-lang/qvm>
-    - <https://github.com/quil-lang/magicl>
-    - <https://github.com/quil-lang/quilc>
-    - <https://github.com/quil-lang/sbcl-librarian>
-
 ### Set up Quicklisp
 
 1. Follow the official instructions to [install Quicklisp](https://www.quicklisp.org/beta/#installation).
-2. Make sure `$HOME/.sbclrc` contains the following (replace `$LISP_WORKSPACE` with the actual value):
+
+#### Configure your local projects directory
+
+Quicklisp has a [local projects mechanism](http://blog.quicklisp.org/2018/01/the-quicklisp-local-projects-mechanism.html)
+which we'll be using to build `quilc` with it's dependencies. By default, this directory is `$HOME/quicklisp/local-projects`.
+If you want to use something different, you need to make sure `$HOME/.sbclrc` contains the following
+(replace `$LISP_WORKSPACE` with the actual value):
 
 ```lisp
 ;;; The following lines added by ql:add-to-init-file:
@@ -44,6 +38,18 @@ SBCL must be installed from source to make sure you have the `libsbcl` shared li
 #+quicklisp
 (push "$LISP_WORKSPACE" ql:*local-project-directories*)
 ```
+
+From here on, we'll refer to the local project directory you've chosen to use, whether it's the default or not, as `$LISP_WORKSPACE`.
+
+### Set up Lisp workspaces
+
+**Important**: The above `sbcl` folder must **not** be in the workspace folder -- it will cause issues.
+
+1. Clone the following repos into `$LISP_WORKSPACE`
+    - <https://github.com/quil-lang/qvm>
+    - <https://github.com/quil-lang/magicl>
+    - <https://github.com/quil-lang/quilc>
+    - <https://github.com/quil-lang/sbcl-librarian>
 
 ### Build `quilc`
 
@@ -70,16 +76,18 @@ cp quilc/lib/libquilc.so quilc/lib/tests/c/
 echo "H 0" | quilc/lib/tests/c/compile-quil
 ```
 
-### Build `libquil-sys`
+### Build and test `libquil-sys`
 
-From the root of this repository:
+By default, this library assumes `quilc` is in the default Quicklisp local projects directory (`$HOME/quicklisp/local-projects`).
+If you defined a non-default local projects directory for quilc, you need to set `$QUILC_LIBRARY_PATH` to the folder 
+where you built the quilc library (the folder containing `libquilc.dylib`). For example,
 
-1. Edit `build.rs` and replace the hard-coded paths with your local paths:
-  - `cargo:rustc-link-search=$LISP_WORKSPACE/quilc/lib`
-  - `cargo:rerun-if-changed=$LISP_WORKSPACE/quilc/lib/libquilc.h`
-  - `.header("$LISP_WORKSPACE/quilc/lib/libquilc.h")`
-  - Required until [this issue](https://github.com/rigetti/libquil-sys/issues/2) gets resolved.
-2. Run the following commands:
+```bash
+export QUILC_LIBRARY_PATH=$LISP_WORKSPACE/quilc/lib
+```
+
+Then, from the root of this repository:
+
 ```bash
 cp "$LISP_WORKSPACE/quilc/lib/libquilc.dylib" .
 cp "$LISP_WORKSPACE/quilc/lib/libquilc.core" .
