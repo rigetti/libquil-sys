@@ -4,6 +4,8 @@ use std::path::PathBuf;
 fn main() {
     // Get the quilc library path from users environment
     // If unset, defaults to the standard directory for quicklisp local projects
+    // Note: Quicklisp requires that the user sets $HOME on Windows, so the default
+    // here is cross-platform.
     let quilc_library_path = PathBuf::from(
         env::var("QUILC_LIBRARY_PATH").unwrap_or(
             format!(
