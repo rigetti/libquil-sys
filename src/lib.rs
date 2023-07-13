@@ -2,7 +2,7 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
-use std::sync::Once;
+use std::{ffi::CStr, sync::Once};
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
@@ -88,12 +88,24 @@ pub fn print_program(program: &Program) {
     }
 }
 
+pub fn program_string(program: &Program) -> String {
+    init_libquilc();
+
+    unsafe {
+        let mut program_string_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
+        quilc_program_string.unwrap()(program.0, &mut program_string_ptr);
+        let program_string = CStr::from_ptr(program_string_ptr)
+            .to_string_lossy()
+            .to_string();
+        program_string
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    fn new_quil_program() -> Program {
-        let sample_quil = r#"
+    const sample_quil: &str = r#"
 DECLARE ro BIT[2]
 DECLARE theta REAL
 RX(theta) 0
@@ -101,10 +113,10 @@ X 0
 CNOT 0 1
 MEASURE 0 ro[0]
 MEASURE 1 ro[1]
-    "#
-        .to_string();
+"#;
 
-        parse_program(sample_quil)
+    fn new_quil_program() -> Program {
+        parse_program(sample_quil.to_string())
     }
 
     #[test]
@@ -112,10 +124,13 @@ MEASURE 1 ro[1]
         let program = new_quil_program();
         let chip = get_chip();
         compile_protoquil(&program, &chip);
+    }
 
-        // Since there is no way to inspect the return compiled program yet,
-        // just make sure the code doesn't panic before getting to this point.
-        // See: https://github.com/rigetti/libquil-sys/issues/12
-        assert!(false)
+    #[test]
+    fn test_program_string() {
+        let expected: quil_rs::Program = sample_quil.parse().unwrap();
+        let program = new_quil_program();
+        let actual: quil_rs::Program = program_string(&program).parse().unwrap();
+        assert_eq!(actual, expected);
     }
 }
