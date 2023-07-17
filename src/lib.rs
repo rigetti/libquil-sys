@@ -9,9 +9,11 @@ use std::{
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
+/// A quilc chip specification
 #[derive(Debug)]
 pub struct Chip(chip_specification);
 
+/// A parsed Quil program
 #[derive(Debug)]
 pub struct Program(quil_program);
 
@@ -29,7 +31,7 @@ fn init_libquilc() {
     })
 }
 
-/// Parses a String into a Program object for use with other libquil calls.
+/// Parses a [`CString`] into a [`Program`] for use with other libquil calls.
 pub fn parse_program(program: CString) -> Program {
     init_libquilc();
     let mut c_chars: Vec<i8> = program
@@ -48,7 +50,7 @@ pub fn parse_program(program: CString) -> Program {
     Program(parsed_program)
 }
 
-/// Compiles the program, optimized for the given Chip.
+/// Compiles the [`Program`] for the given [`Chip`]
 pub fn compile_program(program: &Program, chip: &Chip) -> Program {
     init_libquilc();
     let mut compiled_program: quil_program = std::ptr::null_mut();
@@ -60,6 +62,8 @@ pub fn compile_program(program: &Program, chip: &Chip) -> Program {
     Program(compiled_program)
 }
 
+/// Compiles the [`Program`] for the given [`Chip`] and restricts
+/// the resulting [`Program`] to satisfy "protoquil" constraints
 pub fn compile_protoquil(program: &Program, chip: &Chip) -> Program {
     init_libquilc();
     let mut compiled_program: quil_program = std::ptr::null_mut();
@@ -71,7 +75,7 @@ pub fn compile_protoquil(program: &Program, chip: &Chip) -> Program {
     Program(compiled_program)
 }
 
-/// Get an arbritrary Chip.
+/// Get a fully-connected 2Q [`Chip`]
 pub fn get_chip() -> Chip {
     init_libquilc();
     let mut chip: chip_specification = std::ptr::null_mut();
@@ -83,7 +87,7 @@ pub fn get_chip() -> Chip {
     Chip(chip)
 }
 
-/// Prints the given Program to stdout
+/// Prints the given [`Program`] to stdout
 pub fn print_program(program: &Program) {
     init_libquilc();
     unsafe {
@@ -91,6 +95,7 @@ pub fn print_program(program: &Program) {
     }
 }
 
+/// Get the [`CString`] representation of a program
 pub fn program_string(program: &Program) -> CString {
     init_libquilc();
 
