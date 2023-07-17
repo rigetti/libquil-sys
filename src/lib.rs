@@ -2,7 +2,10 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
-use std::{ffi::CStr, sync::Once};
+use std::{
+    ffi::{CStr, CString},
+    sync::Once,
+};
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
@@ -27,10 +30,10 @@ fn init_libquilc() {
 }
 
 /// Parses a String into a Program object for use with other libquil calls.
-pub fn parse_program(program: String) -> Program {
+pub fn parse_program(program: CString) -> Program {
     init_libquilc();
     let mut c_chars: Vec<i8> = program
-        .as_bytes()
+        .as_bytes_with_nul()
         .to_vec()
         .iter()
         .map(|c| *c as i8)
@@ -88,16 +91,13 @@ pub fn print_program(program: &Program) {
     }
 }
 
-pub fn program_string(program: &Program) -> String {
+pub fn program_string(program: &Program) -> CString {
     init_libquilc();
 
     unsafe {
         let mut program_string_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
         quilc_program_string.unwrap()(program.0, &mut program_string_ptr);
-        let program_string = CStr::from_ptr(program_string_ptr)
-            .to_string_lossy()
-            .to_string();
-        program_string
+        CStr::from_ptr(program_string_ptr).into()
     }
 }
 
@@ -105,18 +105,19 @@ pub fn program_string(program: &Program) -> String {
 mod tests {
     use super::*;
 
-    const sample_quil: &str = r#"
-DECLARE ro BIT[2]
+    const sample_quil: &str = "DECLARE ro BIT[2]
 DECLARE theta REAL
 RX(theta) 0
 X 0
 CNOT 0 1
+
+
 MEASURE 0 ro[0]
 MEASURE 1 ro[1]
-"#;
+";
 
     fn new_quil_program() -> Program {
-        parse_program(sample_quil.to_string())
+        parse_program(CString::new(sample_quil).unwrap())
     }
 
     #[test]
@@ -130,7 +131,11 @@ MEASURE 1 ro[1]
     fn test_program_string() {
         let expected: quil_rs::Program = sample_quil.parse().unwrap();
         let program = new_quil_program();
-        let actual: quil_rs::Program = program_string(&program).parse().unwrap();
+        let actual: quil_rs::Program = program_string(&program)
+            .into_string()
+            .unwrap()
+            .parse()
+            .unwrap();
         assert_eq!(actual, expected);
     }
 }
