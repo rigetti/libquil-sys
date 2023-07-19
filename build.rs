@@ -6,15 +6,10 @@ fn main() {
     // If unset, defaults to the standard directory for quicklisp local projects
     // Note: Quicklisp requires that the user sets $HOME on Windows, so the default
     // here is cross-platform.
-    let quilc_library_path = PathBuf::from(
-        env::var("QUILC_LIBRARY_PATH").unwrap_or(
-            format!(
-                "{}/quicklisp/local-projects/quilc/lib",
-                env::var("HOME").expect("$HOME should be set")
-            )
-            .to_string(),
-        ),
-    );
+    let quilc_library_path = PathBuf::from(env::var("QUILC_LIBRARY_PATH").unwrap_or(format!(
+        "{}/quicklisp/local-projects/quilc/lib",
+        env::var("HOME").expect("$HOME should be set")
+    )));
 
     // Tell cargo to look for shared libraries in the specified directory
     println!("cargo:rustc-link-search={}", quilc_library_path.display());

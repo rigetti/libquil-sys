@@ -15,3 +15,6 @@ cc = { version = "1.0", features = ["parallel"] }
 pkg-config = "0.3"
 bindgen = "0.53.1"
 
+[dev-dependencies]
+quil-rs = "0.19.0"
+
