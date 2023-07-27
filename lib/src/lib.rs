@@ -14,19 +14,21 @@ static START: Once = Once::new();
 
 /// Initializes libquilc using it's core image. No-op after the first call.
 fn init_libquilc() {
-    START.call_once(|| {
-        let bytes = b"libquilc.core\0".to_vec();
-        let mut c_chars: Vec<i8> = bytes.iter().map(|c| *c as i8).collect();
-        let ptr = c_chars.as_mut_ptr();
-        unsafe {
-            init(ptr);
-        }
-    })
+    let bytes = b"libquilc.core\0".to_vec();
+    let mut c_chars: Vec<i8> = bytes.iter().map(|c| *c as i8).collect();
+    let ptr = c_chars.as_mut_ptr();
+    unsafe {
+        dbg!("before");
+        init(ptr);
+        dbg!("after");
+    }
 }
 
 /// A quilc chip specification
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Chip(chip_specification);
+
+unsafe impl Send for Chip {}
 
 impl From<CString> for Chip {
     fn from(json: CString) -> Self {
@@ -49,11 +51,14 @@ impl From<CString> for Chip {
 }
 
 /// A parsed Quil program
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Program(quil_program);
+
+unsafe impl Send for Program {}
 
 impl From<CString> for Program {
     fn from(program: CString) -> Self {
+        dbg!("hello");
         init_libquilc();
         let mut c_chars: Vec<i8> = program
             .as_bytes_with_nul()
@@ -64,6 +69,7 @@ impl From<CString> for Program {
         let ptr = c_chars.as_mut_ptr();
         let mut parsed_program: quil_program = std::ptr::null_mut();
 
+        dbg!(&c_chars);
         unsafe {
             quilc_parse_quil.unwrap()(ptr, &mut parsed_program);
         }

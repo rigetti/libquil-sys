@@ -1,0 +1,19 @@
+[package]
+name = "libquil"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+libquil-sys = { path = "../lib" }
+# pyo3 dependencies should be updated together
+numpy = { version = "0.17.2" }
+pyo3 = { version = "0.17", features = ["extension-module"] }
+rigetti-pyo3 = "0.1.0"
+
+[build-dependencies]
+pyo3-build-config = { version = "0.17" }
