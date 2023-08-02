@@ -1,5 +1,5 @@
 [package]
-name = "libquil"
+name = "libquil_py"
 version = "0.1.0"
 edition = "2021"
 
@@ -9,6 +9,7 @@ edition = "2021"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
+libloading = "0.8.0"
 libquil-sys = { path = "../lib" }
 # pyo3 dependencies should be updated together
 numpy = { version = "0.17.2" }

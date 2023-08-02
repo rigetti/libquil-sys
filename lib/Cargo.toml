@@ -9,6 +9,7 @@ build = "build.rs"
 
 [dependencies]
 libc = "0.2"
+thiserror = "1.0.44"
 
 [build-dependencies]
 cc = { version = "1.0", features = ["parallel"] }
@@ -16,5 +17,6 @@ pkg-config = "0.3"
 bindgen = "0.53.1"
 
 [dev-dependencies]
+assert2 = "0.3.11"
 quil-rs = "0.19.0"
 
