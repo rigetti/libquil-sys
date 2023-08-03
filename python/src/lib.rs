@@ -11,14 +11,14 @@ wrap_error! {
 }
 
 py_wrap_error!(
-    libquil_py,
+    libquil,
     RustLibquilError,
     PyLibquilError,
     pyo3::exceptions::PyException
 );
 
 #[pymodule]
-fn libquil_py(py: Python<'_>, m: &PyModule) -> PyResult<()> {
+fn libquil(py: Python<'_>, m: &PyModule) -> PyResult<()> {
     unsafe {
         // The library built by maturin does link to libquilc, but
         // the linker does not make the libquilc symbols available
