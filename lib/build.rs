@@ -15,7 +15,6 @@ fn main() {
     println!("cargo:rustc-link-search={}", quilc_library_path.display());
 
     println!("cargo:rustc-link-lib=quilc");
-    // println!("cargo:rustc-link-lib=sbcl");
 
     // Tell cargo to rerun in the libquilc implementation has changed
     let impl_path = quilc_library_path.join("libquilc.c");

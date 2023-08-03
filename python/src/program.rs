@@ -10,7 +10,7 @@ py_wrap_struct! {
         py -> rs {
             str: Py<PyString> => Chip {
                 let s = str.as_ref(py).to_str()?;
-                let program = s.parse().map_err(|err: libquil_sys::Error| crate::RustLibquilError::from(err).to_py_err())?;
+                let program = s.parse().map_err(|err| crate::RustLibquilError::from(err).to_py_err())?;
                 Ok::<_, PyErr>(Program(program))
             }
         },
