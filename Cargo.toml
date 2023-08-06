@@ -9,6 +9,10 @@ build = "build.rs"
 
 [dependencies]
 libc = "0.2"
+monostate = "0.1.9"
+serde = "1.0.180"
+serde-aux = "4.2.0"
+serde_json = "1.0.104"
 
 [build-dependencies]
 cc = { version = "1.0", features = ["parallel"] }
@@ -16,5 +20,7 @@ pkg-config = "0.3"
 bindgen = "0.53.1"
 
 [dev-dependencies]
+pretty_assertions = "1.4.0"
 quil-rs = "0.19.0"
+rstest = "0.18.1"
 
