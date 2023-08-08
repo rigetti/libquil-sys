@@ -46,15 +46,8 @@ fn init_libquilc() {
             // TODO Make this an error rather than a panic
             panic!("Could not find libquilc core file. Do you need to set LIBQUILC_CORE_PATH environment variable?");
         }
-        let bytes = match std::env::var("LIBQUILC_CORE_PATH") {
-            Ok(mut path) => {
-                path.push('\0');
-                path.as_bytes().to_vec()
-            }
-            Err(_) => b"libquilc.core\0".to_vec(),
-        };
-        let mut c_chars: Vec<i8> = bytes.iter().map(|c| *c as i8).collect();
-        let ptr = c_chars.as_mut_ptr();
+        let ptr = CString::new(path).unwrap().into_raw();
+
         unsafe {
             init(ptr);
         }
@@ -73,13 +66,7 @@ impl TryFrom<CString> for Chip {
     fn try_from(json: CString) -> Result<Self, Self::Error> {
         init_libquilc();
 
-        let mut c_chars: Vec<i8> = json
-            .as_bytes_with_nul()
-            .to_vec()
-            .iter()
-            .map(|c| *c as i8)
-            .collect();
-        let ptr = c_chars.as_mut_ptr();
+        let ptr = json.into_raw();
         let mut chip: chip_specification = std::ptr::null_mut();
 
         unsafe {
@@ -98,6 +85,7 @@ impl FromStr for Chip {
         CString::new(s).map_err(Error::UnexpectedNul)?.try_into()
     }
 }
+
 /// A parsed Quil program
 #[derive(Clone, Debug)]
 pub struct Program(quil_program);
@@ -109,13 +97,8 @@ impl TryFrom<CString> for Program {
 
     fn try_from(program: CString) -> Result<Self, Self::Error> {
         init_libquilc();
-        let mut c_chars: Vec<i8> = program
-            .as_bytes_with_nul()
-            .to_vec()
-            .iter()
-            .map(|c| *c as i8)
-            .collect();
-        let ptr = c_chars.as_mut_ptr();
+
+        let ptr = program.into_raw();
         let mut parsed_program: quil_program = std::ptr::null_mut();
 
         unsafe {
