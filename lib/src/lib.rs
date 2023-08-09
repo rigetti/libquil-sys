@@ -58,6 +58,8 @@ fn init_libquilc() {
 #[derive(Clone, Debug)]
 pub struct Chip(chip_specification);
 
+// The Chip memory held by libquil is never mutated and
+// is thus `Send`.
 unsafe impl Send for Chip {}
 
 impl TryFrom<CString> for Chip {
@@ -90,6 +92,8 @@ impl FromStr for Chip {
 #[derive(Clone, Debug)]
 pub struct Program(quil_program);
 
+// The Program memory held by libquil is never mutated and
+// is thus `Send`.
 unsafe impl Send for Program {}
 
 impl TryFrom<CString> for Program {
