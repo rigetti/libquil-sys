@@ -1,9 +1,10 @@
+//! Quilc-compatible chip specification
 use serde::Serializer;
 use serde_aux::prelude::deserialize_string_from_number;
 
-pub(crate) mod isa;
+pub mod isa;
 mod parity_test;
-pub(crate) mod specs;
+pub mod specs;
 
 /// A `ChipSpec` defines the various hardware objects that are available
 /// when compiling a quantum program.

@@ -1,3 +1,5 @@
+//! The instruction characteristics for a chip specification
+
 use std::collections::HashMap;
 
 #[derive(Debug, serde::Serialize, serde::Deserialize, PartialEq)]
@@ -12,5 +14,6 @@ pub struct Specs {
     pub two_q: Option<HashMap<String, SpecsMap>>,
 }
 
+/// Maps a characteristic's name to its value (e.g. `"T1":  1e-5`)
 #[derive(Debug, serde::Serialize, serde::Deserialize, PartialEq)]
 pub struct SpecsMap(HashMap<String, f64>);

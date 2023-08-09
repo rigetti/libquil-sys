@@ -1,3 +1,5 @@
+//! The supported Instruction Set Architecture for a chip specification
+
 use serde::{de::Deserializer, Deserialize, Serializer};
 
 use std::collections::HashMap;
