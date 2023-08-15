@@ -49,6 +49,16 @@ fn init_libquilc() {
         let ptr = CString::new(path).unwrap().into_raw();
 
         unsafe {
+            // The library built by maturin does link to libquilc, but
+            // the linker does not make the libquilc symbols available
+            // to the lisp image. To get around that, we load it here
+            // with the `RTLD_GLOBAL` flag which makes symbols available
+            // to the whole process.
+            libloading::os::unix::Library::open(
+                Some("libquilc.so"),
+                libloading::os::unix::RTLD_NOW | libloading::os::unix::RTLD_GLOBAL,
+            )
+            .unwrap();
             init(ptr);
         }
     })
