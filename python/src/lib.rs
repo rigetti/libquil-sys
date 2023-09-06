@@ -7,12 +7,12 @@ use pyo3::prelude::*;
 use rigetti_pyo3::{create_init_submodule, py_wrap_error, wrap_error};
 
 wrap_error! {
-    RustLibquilError(libquil_sys::Error)
+    RustLibquilQuilcError(libquil_sys::quilc::Error)
 }
 
 py_wrap_error!(
     libquil,
-    RustLibquilError,
+    RustLibquilQuilcError,
     PyLibquilError,
     pyo3::exceptions::PyException
 );

@@ -31,14 +31,14 @@ pub fn compile(
     let protoquil = options.and_then(|e| e.into_inner().protoquil);
 
     let compiled_program = if let Some(true) = protoquil {
-        libquil_sys::compile_protoquil(&program.into_inner().0, &chip.into_inner().0)
-            .map_err(|e| crate::RustLibquilError::from(e).to_py_err())?
+        libquil_sys::quilc::compile_protoquil(&program.into_inner().0, &chip.into_inner().0)
+            .map_err(|e| crate::RustLibquilQuilcError::from(e).to_py_err())?
     } else {
-        libquil_sys::compile_program(&program.into_inner().0, &chip.into_inner().0)
-            .map_err(|e| crate::RustLibquilError::from(e).to_py_err())?
+        libquil_sys::quilc::compile_program(&program.into_inner().0, &chip.into_inner().0)
+            .map_err(|e| crate::RustLibquilQuilcError::from(e).to_py_err())?
     };
 
     compiled_program
         .to_string()
-        .map_err(|e| crate::RustLibquilError::from(e).to_py_err())
+        .map_err(|e| crate::RustLibquilQuilcError::from(e).to_py_err())
 }
