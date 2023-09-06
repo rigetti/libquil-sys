@@ -19,7 +19,7 @@ py_wrap_error!(
 
 #[pymodule]
 fn libquil(py: Python<'_>, m: &PyModule) -> PyResult<()> {
-    init_submodule("libquil_py", py, m)?;
+    init_submodule("libquil", py, m)?;
     Ok(())
 }
 
