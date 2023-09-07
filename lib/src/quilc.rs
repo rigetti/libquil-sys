@@ -68,7 +68,7 @@ impl FromStr for Chip {
 
 /// A parsed Quil program
 #[derive(Clone, Debug)]
-pub struct Program(quil_program);
+pub struct Program(pub(crate) quil_program);
 
 // The Program memory held by libquil is never mutated and
 // is thus `Send`.
