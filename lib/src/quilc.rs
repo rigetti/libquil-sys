@@ -1,8 +1,9 @@
 use crate::{
     bindings::{
         chip_specification, quil_program, quilc_build_nq_linear_chip, quilc_compile_protoquil,
-        quilc_compile_quil, quilc_parse_chip_spec_isa_json, quilc_parse_quil, quilc_print_program,
-        quilc_program_string,
+        quilc_compile_quil, quilc_get_version_info, quilc_parse_chip_spec_isa_json,
+        quilc_parse_quil, quilc_print_program, quilc_program_string, quilc_version_info,
+        quilc_version_info_githash, quilc_version_info_version,
     },
     init_libquil,
 };
@@ -167,8 +168,39 @@ pub fn print_program(program: &Program) -> Result<(), Error> {
     Ok(())
 }
 
+#[derive(Debug)]
+pub struct VersionInfo {
+    pub version: String,
+    pub githash: String,
+}
+
+pub fn get_version_info() -> Result<VersionInfo, Error> {
+    init_libquil();
+
+    unsafe {
+        let mut version_info: quilc_version_info = std::ptr::null_mut();
+        let err = quilc_get_version_info.unwrap()(&mut version_info);
+        crate::handle_libquil_error(err).map_err(Error::PrintProgram)?;
+
+        let mut version_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
+        let err = quilc_version_info_version.unwrap()(version_info, &mut version_ptr);
+        crate::handle_libquil_error(err).map_err(Error::PrintProgram)?;
+
+        let mut githash_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
+        let err = quilc_version_info_githash.unwrap()(version_info, &mut githash_ptr);
+        crate::handle_libquil_error(err).map_err(Error::PrintProgram)?;
+
+        Ok(VersionInfo {
+            version: CStr::from_ptr(version_ptr).to_str()?.to_string(),
+            githash: CStr::from_ptr(githash_ptr).to_str()?.to_string(),
+        })
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    // use crate::bindings::quilc_get_version_info;
+
     use super::*;
     use assert2::let_assert;
 
@@ -224,5 +256,10 @@ MEASURE 1 ro[1]
         let program = new_quil_program();
         let actual: quil_rs::Program = program.to_string().unwrap().parse().unwrap();
         assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn test_get_version_info() {
+        get_version_info().unwrap();
     }
 }
