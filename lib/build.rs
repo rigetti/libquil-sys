@@ -2,22 +2,22 @@ use std::env;
 use std::path::PathBuf;
 
 fn main() {
-    // Get the quilc library path from users environment
+    // Get the libquil library path from users environment
     // If unset, defaults to the standard directory for quicklisp local projects
     // Note: Quicklisp requires that the user sets $HOME on Windows, so the default
     // here is cross-platform.
-    let quilc_library_path = PathBuf::from(env::var("QUILC_LIBRARY_PATH").unwrap_or(format!(
-        "{}/quicklisp/local-projects/quilc/lib",
+    let libquil_src_path = PathBuf::from(env::var("LIBQUIL_SRC_PATH").unwrap_or(format!(
+        "{}/quicklisp/local-projects/libquil",
         env::var("HOME").expect("$HOME should be set")
     )));
 
     // Tell cargo to look for shared libraries in the specified directory
-    println!("cargo:rustc-link-search={}", quilc_library_path.display());
+    println!("cargo:rustc-link-search={}", libquil_src_path.display());
 
-    println!("cargo:rustc-link-lib=quilc");
+    println!("cargo:rustc-link-lib=quil");
 
-    // Tell cargo to rerun in the libquilc implementation has changed
-    let impl_path = quilc_library_path.join("libquilc.c");
+    // Tell cargo to rerun if the libquil implementation has changed
+    let impl_path = libquil_src_path.join("libquil.c");
     println!("cargo:rustc-rerun-if-changed={}", impl_path.display());
 
     // If this isn't set on MacOS, memory allocation errors occur when trying to initialize the
@@ -26,7 +26,7 @@ fn main() {
         println!("cargo:rustc-link-arg=-pagezero_size 0x100000");
     }
 
-    let header_path = quilc_library_path.join("libquilc.h");
+    let header_path = libquil_src_path.join("libquil.h");
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
