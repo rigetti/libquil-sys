@@ -42,7 +42,7 @@ pub struct VersionInfo {
 
 impl Display for VersionInfo {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "quilc {} ({})", self.version, self.githash)
+        write!(f, "QVM {} ({})", self.version, self.githash)
     }
 }
 
