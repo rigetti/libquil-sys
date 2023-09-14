@@ -1,6 +1,7 @@
 use std::{
     collections::HashMap,
     ffi::{CStr, CString},
+    fmt::Display,
 };
 
 use crate::{
@@ -37,6 +38,12 @@ pub enum Error {
 pub struct VersionInfo {
     pub version: String,
     pub githash: String,
+}
+
+impl Display for VersionInfo {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "quilc {} ({})", self.version, self.githash)
+    }
 }
 
 pub fn get_version_info() -> Result<VersionInfo, Error> {

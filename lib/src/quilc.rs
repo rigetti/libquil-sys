@@ -9,6 +9,7 @@ use crate::{
 };
 use std::{
     ffi::{CStr, CString},
+    fmt::Display,
     str::FromStr,
 };
 
@@ -172,6 +173,12 @@ pub fn print_program(program: &Program) -> Result<(), Error> {
 pub struct VersionInfo {
     pub version: String,
     pub githash: String,
+}
+
+impl Display for VersionInfo {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "QVM {} ({})", self.version, self.githash)
+    }
 }
 
 pub fn get_version_info() -> Result<VersionInfo, Error> {
