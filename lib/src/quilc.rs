@@ -144,7 +144,6 @@ pub fn compile_protoquil(program: &Program, chip: &Chip) -> Result<Program, Erro
 }
 
 /// Get a fully-connected 2Q [`Chip`]
-// TODO Remove in favor of a better chip builder
 pub fn get_chip() -> Result<Chip, Error> {
     init_libquil();
     let mut chip: chip_specification = std::ptr::null_mut();
