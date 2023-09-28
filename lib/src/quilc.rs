@@ -1,9 +1,10 @@
 use crate::{
     bindings::{
         chip_specification, quil_program, quilc_build_nq_linear_chip, quilc_compile_protoquil,
-        quilc_compile_quil, quilc_get_version_info, quilc_parse_chip_spec_isa_json,
-        quilc_parse_quil, quilc_print_program, quilc_program_string, quilc_version_info,
-        quilc_version_info_githash, quilc_version_info_version,
+        quilc_compile_quil, quilc_conjugate_pauli_by_clifford, quilc_generate_rb_sequence,
+        quilc_get_version_info, quilc_parse_chip_spec_isa_json, quilc_parse_quil,
+        quilc_print_program, quilc_program_string, quilc_version_info, quilc_version_info_githash,
+        quilc_version_info_version,
     },
     init_libquil,
 };
@@ -19,6 +20,10 @@ pub enum Error {
     CompileQuil(String),
     #[error("error when calling quilc_compile_protoquil: {0}")]
     CompileProtoquil(String),
+    #[error("error when calling quilc_conjugate_pauli_by_clifford: {0}")]
+    ConjugatePauliByClifford(String),
+    #[error("error when calling generate_rb_sequence: {0}")]
+    GenerateRbSequence(String),
     #[error("error when calling quilc_parse_quil: {0}")]
     ParseQuil(String),
     #[error("program string contained unexpected NUL character: {0}")]
@@ -168,6 +173,91 @@ pub fn print_program(program: &Program) -> Result<(), Error> {
     Ok(())
 }
 
+#[derive(Debug, PartialEq)]
+pub struct ConjugatePauliByCliffordResult {
+    pub phase: i32,
+    pub pauli: String,
+}
+
+pub fn conjugate_pauli_by_clifford(
+    mut pauli_indices: Vec<u32>,
+    mut pauli_terms: Vec<String>,
+    clifford: &Program,
+) -> Result<ConjugatePauliByCliffordResult, Error> {
+    init_libquil();
+
+    unsafe {
+        let mut phase = 0;
+        let phase_ptr = std::ptr::addr_of_mut!(phase);
+        let pauli_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
+        let err = quilc_conjugate_pauli_by_clifford.unwrap()(
+            pauli_indices.as_mut_ptr() as *mut _,
+            pauli_indices.len() as i32,
+            pauli_terms.as_mut_ptr() as *mut _,
+            pauli_terms.len() as i32,
+            clifford.0,
+            phase_ptr as *mut _,
+            std::ptr::addr_of!(pauli_ptr) as *mut _,
+        );
+        crate::handle_libquil_error(err).map_err(Error::ConjugatePauliByClifford)?;
+        Ok(ConjugatePauliByCliffordResult {
+            phase,
+            pauli: CStr::from_ptr(pauli_ptr).to_str()?.to_string(),
+        })
+    }
+}
+
+pub fn generate_rb_sequence(
+    depth: i32,
+    qubits: i32,
+    gateset: Vec<&Program>,
+    seed: i32,
+    interleaver: Option<&Program>,
+) -> Result<Vec<Vec<i32>>, Error> {
+    init_libquil();
+
+    let mut gateset = gateset.iter().map(|p| p.0).collect::<Vec<_>>();
+    let mut results_ptr: *mut std::ffi::c_int = std::ptr::null_mut();
+    let results_ptr_ptr = std::ptr::addr_of_mut!(results_ptr);
+    // If there is an interleaver program, it is placed between each of the sequences indices,
+    // thus extending the sequence by (depth - 1).
+    let result_lens_len = if interleaver.is_none() {
+        depth
+    } else {
+        2 * depth - 1
+    };
+    let mut result_lens = vec![0_i32; result_lens_len as usize];
+
+    let interleaver = if let Some(interleaver) = interleaver {
+        std::ptr::addr_of!(interleaver.0)
+    } else {
+        std::ptr::null_mut()
+    };
+
+    unsafe {
+        let err = quilc_generate_rb_sequence.unwrap()(
+            depth,
+            qubits,
+            gateset.as_mut_ptr() as *mut _,
+            gateset.len() as i32,
+            seed,
+            interleaver as *mut _,
+            results_ptr_ptr as *mut _,
+            result_lens.as_mut_ptr() as *mut _,
+        );
+        crate::handle_libquil_error(err).map_err(Error::GenerateRbSequence)?;
+    }
+
+    let n_sequences: i32 = result_lens.iter().sum();
+    let results = unsafe { std::slice::from_raw_parts(results_ptr, n_sequences as usize) }.to_vec();
+    let mut results_iter = results.into_iter();
+    let collected_results = result_lens
+        .into_iter()
+        .map(|l| results_iter.by_ref().take(l as usize).collect::<Vec<_>>())
+        .collect::<Vec<_>>();
+    Ok(collected_results)
+}
+
 #[derive(Debug)]
 pub struct VersionInfo {
     pub version: String,
@@ -267,5 +357,43 @@ MEASURE 1 ro[1]
     #[test]
     fn test_get_version_info() {
         get_version_info().unwrap();
+    }
+
+    #[test]
+    fn test_conjugate_pauli_by_clifford() {
+        let pauli_indices = vec![0];
+        let x = "X".to_string();
+        let clifford = "H 0".parse().unwrap();
+
+        let expected = ConjugatePauliByCliffordResult {
+            phase: 0,
+            pauli: "Z".to_string(),
+        };
+        let result = conjugate_pauli_by_clifford(pauli_indices, vec![x], &clifford).unwrap();
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_generate_rb_sequence_with_interleaver() {
+        let phase = "PHASE(pi/2) 0".parse().unwrap();
+        let h = "H 0".parse().unwrap();
+        let y = "Y 0".parse().unwrap();
+        let interleaver = Some(&y);
+
+        let expected = vec![vec![0, 1], vec![2], vec![0, 0, 0, 1], vec![2], vec![0, 1]];
+        let results = generate_rb_sequence(3, 1, vec![&phase, &h, &y], 42, interleaver).unwrap();
+        assert_eq!(results, expected);
+    }
+
+    #[test]
+    fn test_generate_rb_sequence_without_interleaver() {
+        let phase = "PHASE(pi/2) 0".parse().unwrap();
+        let h = "H 0".parse().unwrap();
+        let y = "Y 0".parse().unwrap();
+        let interleaver = None;
+
+        let expected = vec![vec![2, 0, 1], vec![0, 0, 0, 1], vec![0, 1]];
+        let results = generate_rb_sequence(3, 1, vec![&phase, &h, &y], 42, interleaver).unwrap();
+        assert_eq!(results, expected);
     }
 }
