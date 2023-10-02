@@ -271,7 +271,7 @@ pub struct ConjugatePauliByCliffordResult {
 
 pub fn conjugate_pauli_by_clifford(
     mut pauli_indices: Vec<u32>,
-    mut pauli_terms: Vec<String>,
+    mut pauli_terms: Vec<CString>,
     clifford: &Program,
 ) -> Result<ConjugatePauliByCliffordResult, Error> {
     init_libquil();
@@ -280,6 +280,10 @@ pub fn conjugate_pauli_by_clifford(
         let mut phase = 0;
         let phase_ptr = std::ptr::addr_of_mut!(phase);
         let pauli_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
+        let mut pauli_terms = pauli_terms
+            .into_iter()
+            .map(CString::into_raw)
+            .collect::<Vec<_>>();
         let err = quilc_conjugate_pauli_by_clifford.unwrap()(
             pauli_indices.as_mut_ptr() as *mut _,
             pauli_indices.len() as i32,
@@ -458,7 +462,7 @@ MEASURE 1 ro[1]
     #[test]
     fn test_conjugate_pauli_by_clifford() {
         let pauli_indices = vec![0];
-        let x = "X".to_string();
+        let x = CString::new("X").unwrap();
         let clifford = "H 0".parse().unwrap();
 
         let expected = ConjugatePauliByCliffordResult {
