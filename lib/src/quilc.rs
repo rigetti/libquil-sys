@@ -124,7 +124,7 @@ impl Program {
 }
 
 /// Compiles the [`Program`] for the given [`Chip`]
-pub fn compile_program(program: &Program, chip: &Chip) -> Result<Program, Error> {
+pub fn compile_program(program: &Program, chip: &Chip) -> Result<CompilationResult, Error> {
     init_libquil();
     let mut compiled_program: quil_program = std::ptr::null_mut();
 
@@ -133,10 +133,13 @@ pub fn compile_program(program: &Program, chip: &Chip) -> Result<Program, Error>
         crate::handle_libquil_error(err).map_err(Error::CompileQuil)?;
     }
 
-    Ok(Program(compiled_program))
+    Ok(CompilationResult {
+        program: Program(compiled_program),
+        metadata: None,
+    })
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub struct CompilationMetadata {
     pub final_rewiring: Vec<u32>,
     pub gate_depth: Option<u32>,
@@ -209,7 +212,7 @@ impl TryFrom<quilc_compilation_metadata> for CompilationMetadata {
 #[derive(Debug)]
 pub struct CompilationResult {
     pub program: Program,
-    pub metadata: CompilationMetadata,
+    pub metadata: Option<CompilationMetadata>,
 }
 
 /// Compiles the [`Program`] for the given [`Chip`] and restricts
@@ -231,7 +234,7 @@ pub fn compile_protoquil(program: &Program, chip: &Chip) -> Result<CompilationRe
 
     Ok(CompilationResult {
         program: Program(compiled_program),
-        metadata: metadata_ptr.try_into()?,
+        metadata: Some(metadata_ptr.try_into()?),
     })
 }
 
