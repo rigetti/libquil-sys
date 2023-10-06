@@ -329,8 +329,8 @@ pub fn generate_rb_sequence(
         std::ptr::null_mut()
     };
 
-    let seed = if let Some(seed) = seed {
-        std::ptr::addr_of!(seed)
+    let seed_ptr = if let Some(seed) = &mut seed {
+        seed as *const i32
     } else {
         std::ptr::null_mut()
     };
@@ -341,7 +341,7 @@ pub fn generate_rb_sequence(
             qubits,
             gateset.as_mut_ptr() as *mut _,
             gateset.len() as i32,
-            seed as *mut _,
+            seed_ptr as *mut _,
             interleaver as *mut _,
             results_ptr_ptr as *mut _,
             result_lens.as_mut_ptr() as *mut _,
@@ -444,7 +444,7 @@ MEASURE 1 ro[1]
 
     fn read_data_file(name: &str) -> String {
         let mut file = File::open(format!(
-            "{}/{}",
+            "{}/data/{}",
             std::env::var("CARGO_MANIFEST_DIR").unwrap(),
             name
         ))
