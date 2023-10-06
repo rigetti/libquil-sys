@@ -329,7 +329,7 @@ pub fn generate_rb_sequence(
         std::ptr::null_mut()
     };
 
-    let seed_ptr = if let Some(seed) = &mut seed {
+    let seed_ptr = if let Some(seed) = &seed {
         seed as *const i32
     } else {
         std::ptr::null_mut()
