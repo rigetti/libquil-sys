@@ -61,6 +61,7 @@ impl TryFrom<CString> for Chip {
         unsafe {
             let err = quilc_parse_chip_spec_isa_json.unwrap()(ptr, &mut chip);
             crate::handle_libquil_error(err).map_err(Error::ParseChip)?;
+            let _ = CString::from_raw(ptr);
         }
 
         Ok(Chip(chip))
@@ -271,7 +272,7 @@ pub struct ConjugatePauliByCliffordResult {
 
 pub fn conjugate_pauli_by_clifford(
     mut pauli_indices: Vec<u32>,
-    mut pauli_terms: Vec<CString>,
+    pauli_terms: Vec<CString>,
     clifford: &Program,
 ) -> Result<ConjugatePauliByCliffordResult, Error> {
     init_libquil();
@@ -395,7 +396,9 @@ pub fn get_version_info() -> Result<VersionInfo, Error> {
 
 #[cfg(test)]
 mod tests {
-    // use crate::bindings::quilc_get_version_info;
+    use std::{fs::File, io::Read};
+
+    use crate::bindings;
 
     use super::*;
     use assert2::let_assert;
@@ -439,15 +442,35 @@ MEASURE 1 ro[1]
         assert!(error.contains("Unrecognized instruction"));
     }
 
+    fn read_data_file(name: &str) -> String {
+        let mut file = File::open(format!(
+            "{}/{}",
+            std::env::var("CARGO_MANIFEST_DIR").unwrap(),
+            name
+        ))
+        .unwrap();
+        let mut file_str = String::new();
+        file.read_to_string(&mut file_str).unwrap();
+        file_str
+    }
+
     #[test]
     fn test_compile_protoquil() {
         let program = new_quil_program();
-        let chip = get_chip().unwrap();
-        compile_protoquil(&program, &chip).unwrap();
+        let chip = Chip::from_str(&read_data_file("aspen-9-isa.json")).unwrap();
+        compile_program(&program, &chip).unwrap();
     }
 
     #[test]
     fn test_program_string() {
+        let expected: quil_rs::Program = sample_quil.parse().unwrap();
+        let program = new_quil_program();
+        let actual: quil_rs::Program = program.to_string().unwrap().parse().unwrap();
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn test_program_string_2() {
         let expected: quil_rs::Program = sample_quil.parse().unwrap();
         let program = new_quil_program();
         let actual: quil_rs::Program = program.to_string().unwrap().parse().unwrap();

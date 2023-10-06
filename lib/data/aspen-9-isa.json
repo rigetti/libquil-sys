@@ -1,0 +1,4537 @@
+{
+  "_type": "TargetDevice",
+  "isa": {
+    "1Q": {
+      "3": {
+        "id": 3,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              3
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9862658810593544,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              3
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9862658810593544,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              3
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9862658810593544,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              3
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9862658810593544,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              3
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              3
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.938,
+            "qubit": 3,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.938,
+            "qubit": 3,
+            "target": null
+          }
+        ]
+      },
+      "36": {
+        "id": 36,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              36
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.994768361617304,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              36
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.994768361617304,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              36
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.994768361617304,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              36
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.994768361617304,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              36
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              36
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.944,
+            "qubit": 36,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.944,
+            "qubit": 36,
+            "target": null
+          }
+        ]
+      },
+      "16": {
+        "id": 16,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              16
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9950276337064928,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              16
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9950276337064928,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              16
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9950276337064928,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              16
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9950276337064928,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              16
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              16
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.956,
+            "qubit": 16,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.956,
+            "qubit": 16,
+            "target": null
+          }
+        ]
+      },
+      "21": {
+        "id": 21,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              21
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.995211988885312,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              21
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.995211988885312,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              21
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.995211988885312,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              21
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.995211988885312,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              21
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              21
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.958,
+            "qubit": 21,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.958,
+            "qubit": 21,
+            "target": null
+          }
+        ]
+      },
+      "0": {
+        "id": 0,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              0
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9956911241370838,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              0
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9956911241370838,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              0
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9956911241370838,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              0
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9956911241370838,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              0
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              0
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.969,
+            "qubit": 0,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.969,
+            "qubit": 0,
+            "target": null
+          }
+        ]
+      },
+      "7": {
+        "id": 7,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              7
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9155866315726132,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              7
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9155866315726132,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              7
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9155866315726132,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              7
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9155866315726132,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              7
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              7
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.882,
+            "qubit": 7,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.882,
+            "qubit": 7,
+            "target": null
+          }
+        ]
+      },
+      "17": {
+        "id": 17,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              17
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9977503427092118,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              17
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9977503427092118,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              17
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9977503427092118,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              17
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9977503427092118,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              17
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              17
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.932,
+            "qubit": 17,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.932,
+            "qubit": 17,
+            "target": null
+          }
+        ]
+      },
+      "1": {
+        "id": 1,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              1
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9922152028519878,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              1
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9922152028519878,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              1
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9922152028519878,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              1
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9922152028519878,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              1
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              1
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.957,
+            "qubit": 1,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.957,
+            "qubit": 1,
+            "target": null
+          }
+        ]
+      },
+      "24": {
+        "id": 24,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              24
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9901538618812872,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              24
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9901538618812872,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              24
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9901538618812872,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              24
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9901538618812872,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              24
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              24
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.966,
+            "qubit": 24,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.966,
+            "qubit": 24,
+            "target": null
+          }
+        ]
+      },
+      "2": {
+        "id": 2,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              2
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9964576207406768,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              2
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9964576207406768,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              2
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9964576207406768,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              2
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9964576207406768,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              2
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              2
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.93,
+            "qubit": 2,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.93,
+            "qubit": 2,
+            "target": null
+          }
+        ]
+      },
+      "23": {
+        "id": 23,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              23
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9949333206470984,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              23
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9949333206470984,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              23
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9949333206470984,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              23
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9949333206470984,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              23
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              23
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.978,
+            "qubit": 23,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.978,
+            "qubit": 23,
+            "target": null
+          }
+        ]
+      },
+      "15": {
+        "id": 15,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              15
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.998051126078248,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              15
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.998051126078248,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              15
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.998051126078248,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              15
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.998051126078248,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              15
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              15
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.924,
+            "qubit": 15,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.924,
+            "qubit": 15,
+            "target": null
+          }
+        ]
+      },
+      "34": {
+        "id": 34,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              34
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9926544549045436,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              34
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9926544549045436,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              34
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9926544549045436,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              34
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9926544549045436,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              34
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              34
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.977,
+            "qubit": 34,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.977,
+            "qubit": 34,
+            "target": null
+          }
+        ]
+      },
+      "12": {
+        "id": 12,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              12
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.996273752890589,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              12
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.996273752890589,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              12
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.996273752890589,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              12
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.996273752890589,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              12
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              12
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.98,
+            "qubit": 12,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.98,
+            "qubit": 12,
+            "target": null
+          }
+        ]
+      },
+      "6": {
+        "id": 6,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              6
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.949733388721842,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              6
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.949733388721842,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              6
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.949733388721842,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              6
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.949733388721842,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              6
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              6
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.845,
+            "qubit": 6,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.845,
+            "qubit": 6,
+            "target": null
+          }
+        ]
+      },
+      "25": {
+        "id": 25,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              25
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9942399931539552,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              25
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9942399931539552,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              25
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9942399931539552,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              25
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9942399931539552,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              25
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              25
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.972,
+            "qubit": 25,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.972,
+            "qubit": 25,
+            "target": null
+          }
+        ]
+      },
+      "33": {
+        "id": 33,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              33
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9937531086259636,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              33
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9937531086259636,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              33
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9937531086259636,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              33
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9937531086259636,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              33
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              33
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.893,
+            "qubit": 33,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.893,
+            "qubit": 33,
+            "target": null
+          }
+        ]
+      },
+      "22": {
+        "id": 22,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              22
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9897791444791392,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              22
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9897791444791392,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              22
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9897791444791392,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              22
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9897791444791392,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              22
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              22
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.96,
+            "qubit": 22,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.96,
+            "qubit": 22,
+            "target": null
+          }
+        ]
+      },
+      "10": {
+        "id": 10,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              10
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9972497131262976,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              10
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9972497131262976,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              10
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9972497131262976,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              10
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9972497131262976,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              10
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              10
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.963,
+            "qubit": 10,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.963,
+            "qubit": 10,
+            "target": null
+          }
+        ]
+      },
+      "30": {
+        "id": 30,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              30
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9132668401111969,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              30
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9132668401111969,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              30
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9132668401111969,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              30
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9132668401111969,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              30
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              30
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.932,
+            "qubit": 30,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.932,
+            "qubit": 30,
+            "target": null
+          }
+        ]
+      },
+      "14": {
+        "id": 14,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              14
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9955546437860257,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              14
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9955546437860257,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              14
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9955546437860257,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              14
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9955546437860257,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              14
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              14
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.934,
+            "qubit": 14,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.934,
+            "qubit": 14,
+            "target": null
+          }
+        ]
+      },
+      "11": {
+        "id": 11,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              11
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9960821887586347,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              11
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9960821887586347,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              11
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9960821887586347,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              11
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9960821887586347,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              11
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              11
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.897,
+            "qubit": 11,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.897,
+            "qubit": 11,
+            "target": null
+          }
+        ]
+      },
+      "35": {
+        "id": 35,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              35
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9944029599880508,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              35
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9944029599880508,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              35
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9944029599880508,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              35
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9944029599880508,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              35
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              35
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.963,
+            "qubit": 35,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.963,
+            "qubit": 35,
+            "target": null
+          }
+        ]
+      },
+      "31": {
+        "id": 31,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              31
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9929429050177484,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              31
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9929429050177484,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              31
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9929429050177484,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              31
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9929429050177484,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              31
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              31
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.973,
+            "qubit": 31,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.973,
+            "qubit": 31,
+            "target": null
+          }
+        ]
+      },
+      "4": {
+        "id": 4,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              4
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.997147138640965,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              4
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.997147138640965,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              4
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.997147138640965,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              4
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.997147138640965,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              4
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              4
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.977,
+            "qubit": 4,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.977,
+            "qubit": 4,
+            "target": null
+          }
+        ]
+      },
+      "27": {
+        "id": 27,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              27
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.992903815140772,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              27
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.992903815140772,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              27
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.992903815140772,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              27
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.992903815140772,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              27
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              27
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.936,
+            "qubit": 27,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.936,
+            "qubit": 27,
+            "target": null
+          }
+        ]
+      },
+      "32": {
+        "id": 32,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              32
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9285853880650918,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              32
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9285853880650918,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              32
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9285853880650918,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              32
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9285853880650918,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              32
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              32
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.879,
+            "qubit": 32,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.879,
+            "qubit": 32,
+            "target": null
+          }
+        ]
+      },
+      "26": {
+        "id": 26,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              26
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9947121928139244,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              26
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9947121928139244,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              26
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9947121928139244,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              26
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9947121928139244,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              26
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              26
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.976,
+            "qubit": 26,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.976,
+            "qubit": 26,
+            "target": null
+          }
+        ]
+      },
+      "37": {
+        "id": 37,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              37
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.6867671510714974,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              37
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.6867671510714974,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              37
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.6867671510714974,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              37
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.6867671510714974,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              37
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              37
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.955,
+            "qubit": 37,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.955,
+            "qubit": 37,
+            "target": null
+          }
+        ]
+      },
+      "13": {
+        "id": 13,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              13
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9977491274740716,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              13
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9977491274740716,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              13
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9977491274740716,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              13
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9977491274740716,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              13
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              13
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.973,
+            "qubit": 13,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.973,
+            "qubit": 13,
+            "target": null
+          }
+        ]
+      },
+      "5": {
+        "id": 5,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              5
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9977686564218976,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              5
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9977686564218976,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              5
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9977686564218976,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              5
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9977686564218976,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              5
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              5
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.951,
+            "qubit": 5,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.951,
+            "qubit": 5,
+            "target": null
+          }
+        ]
+      },
+      "20": {
+        "id": 20,
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 1.0,
+            "parameters": [
+              0.0
+            ],
+            "arguments": [
+              20
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9912757508610892,
+            "parameters": [
+              3.141592653589793
+            ],
+            "arguments": [
+              20
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9912757508610892,
+            "parameters": [
+              -3.141592653589793
+            ],
+            "arguments": [
+              20
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9912757508610892,
+            "parameters": [
+              1.5707963267948966
+            ],
+            "arguments": [
+              20
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RX",
+            "duration": 50.0,
+            "fidelity": 0.9912757508610892,
+            "parameters": [
+              -1.5707963267948966
+            ],
+            "arguments": [
+              20
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "RZ",
+            "duration": 0.01,
+            "fidelity": 1.0,
+            "parameters": [
+              "_"
+            ],
+            "arguments": [
+              20
+            ]
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.983,
+            "qubit": 20,
+            "target": "_"
+          },
+          {
+            "operator_type": "measure",
+            "operator": "MEASURE",
+            "duration": 2000.0,
+            "fidelity": 0.983,
+            "qubit": 20,
+            "target": null
+          }
+        ]
+      }
+    },
+    "2Q": {
+      "30-37": {
+        "ids": [
+          30,
+          37
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.883117578766347,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.8309201064261597,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.8809993889096304,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "22-35": {
+        "ids": [
+          22,
+          35
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.9743912993252486,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.8511569626123875,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9719786316589188,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "25-26": {
+        "ids": [
+          25,
+          26
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.9307211076366546,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.8787091237767245,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.8182136734824926,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "5-6": {
+        "ids": [
+          5,
+          6
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.8545654421583718,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.826202204606399,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.7527066634702364,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "12-13": {
+        "ids": [
+          12,
+          13
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.9760734681101292,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.9363066127570604,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9896554638443328,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "24-25": {
+        "ids": [
+          24,
+          25
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.944928950698874,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.8905320195507429,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9583982713991072,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "1-2": {
+        "ids": [
+          1,
+          2
+        ],
+        "dead": true,
+        "gates": []
+      },
+      "2-15": {
+        "ids": [
+          2,
+          15
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.8409478024899799,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.8285562349078477,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9687728230073872,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "26-27": {
+        "ids": [
+          26,
+          27
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.807268483090248,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.8098619542054368,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.8040749019209398,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "20-27": {
+        "ids": [
+          20,
+          27
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.948727901007542,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.9035226776351484,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.913518761034807,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "21-36": {
+        "ids": [
+          21,
+          36
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.8553182565070833,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.9579542454434008,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.936196253993223,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "0-1": {
+        "ids": [
+          0,
+          1
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.01,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9705950060139688,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "12-25": {
+        "ids": [
+          12,
+          25
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.9846461604370008,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.979100990959794,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "33-34": {
+        "ids": [
+          33,
+          34
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.9592185249936652,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.962681916404059,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9796675480713294,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "16-17": {
+        "ids": [
+          16,
+          17
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.7875085250195251,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "31-32": {
+        "ids": [
+          31,
+          32
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.9055504269193292,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.8672412814346131,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.8591886954346813,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "35-36": {
+        "ids": [
+          35,
+          36
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.9449140011934885,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.9543523933846084,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9598367211257248,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "14-15": {
+        "ids": [
+          14,
+          15
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.8699135846798165,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.8894255540363747,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9654911232867834,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "10-11": {
+        "ids": [
+          10,
+          11
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.9655245463369166,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.9523968083470724,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9784501719436262,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "0-7": {
+        "ids": [
+          0,
+          7
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.8934083716043216,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.8583608975095097,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.8902673467161003,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "21-22": {
+        "ids": [
+          21,
+          22
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.9639006605394668,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.9328955031519044,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9548675240974294,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "10-17": {
+        "ids": [
+          10,
+          17
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.9868856204274468,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.9823290880376048,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9554616980286827,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "22-23": {
+        "ids": [
+          22,
+          23
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.9381255057648658,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.9529769141153664,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9300767034163138,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "4-5": {
+        "ids": [
+          4,
+          5
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.9819570607006214,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.9582700865807312,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9691972114080092,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "1-16": {
+        "ids": [
+          1,
+          16
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.8760258654432441,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "3-4": {
+        "ids": [
+          3,
+          4
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.9777402514839096,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.9127413051950594,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9491870786733688,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "13-14": {
+        "ids": [
+          13,
+          14
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.8966647555225451,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.8260155229345169,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9538337466627906,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "32-33": {
+        "ids": [
+          32,
+          33
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.8976175101196088,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.8784980357528805,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9487378643352372,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "11-12": {
+        "ids": [
+          11,
+          12
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.9830429821883002,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.9529677407566464,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9818022437384036,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "23-24": {
+        "ids": [
+          23,
+          24
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.979147936295846,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.9427403721117412,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9731077110790548,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "11-26": {
+        "ids": [
+          11,
+          26
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.8083484941531955,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.7955999962677089,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "30-31": {
+        "ids": [
+          30,
+          31
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.8579174999621574,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.82855057059291,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.7618651530286145,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "36-37": {
+        "ids": [
+          36,
+          37
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.8411617533266275,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.9771326895108404,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9676569077270954,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "34-35": {
+        "ids": [
+          34,
+          35
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.9709691754023247,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.9586876150686444,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9672788462340832,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "20-21": {
+        "ids": [
+          20,
+          21
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.972339198538244,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.9578145832747852,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9488254611121434,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "6-7": {
+        "ids": [
+          6,
+          7
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.8432331321286316,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.8536377914573313,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.8574552651528831,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "2-3": {
+        "ids": [
+          2,
+          3
+        ],
+        "gates": [
+          {
+            "operator_type": "gate",
+            "operator": "CZ",
+            "duration": 200.0,
+            "fidelity": 0.879442138576829,
+            "parameters": [],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "CPHASE",
+            "duration": 200.0,
+            "fidelity": 0.8622961842658053,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          },
+          {
+            "operator_type": "gate",
+            "operator": "XY",
+            "duration": 200.0,
+            "fidelity": 0.9027378069089788,
+            "parameters": [
+              "theta"
+            ],
+            "arguments": [
+              "_",
+              "_"
+            ]
+          }
+        ]
+      },
+      "15-16": {
+        "ids": [
+          15,
+          16
+        ],
+        "dead": true,
+        "gates": []
+      }
+    }
+  },
+  "specs": {}
+}
