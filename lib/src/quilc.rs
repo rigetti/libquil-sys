@@ -1,10 +1,10 @@
 use crate::{
     bindings::{
-        chip_specification, quil_program, quilc_build_nq_linear_chip, quilc_compile_protoquil,
-        quilc_compile_quil, quilc_conjugate_pauli_by_clifford, quilc_generate_rb_sequence,
-        quilc_get_version_info, quilc_parse_chip_spec_isa_json, quilc_parse_quil,
-        quilc_print_program, quilc_program_string, quilc_version_info, quilc_version_info_githash,
-        quilc_version_info_version,
+        chip_specification, quil_program, quilc_build_nq_linear_chip, quilc_compilation_metadata,
+        quilc_compile_protoquil, quilc_compile_quil, quilc_conjugate_pauli_by_clifford,
+        quilc_generate_rb_sequence, quilc_get_version_info, quilc_parse_chip_spec_isa_json,
+        quilc_parse_quil, quilc_print_program, quilc_program_string, quilc_version_info,
+        quilc_version_info_githash, quilc_version_info_version,
     },
     init_libquil,
 };
@@ -20,6 +20,8 @@ pub enum Error {
     CompileQuil(String),
     #[error("error when calling quilc_compile_protoquil: {0}")]
     CompileProtoquil(String),
+    #[error("error when getting compilation metadata: {0}")]
+    CompilationMetadata(String),
     #[error("error when calling quilc_conjugate_pauli_by_clifford: {0}")]
     ConjugatePauliByClifford(String),
     #[error("error when calling generate_rb_sequence: {0}")]
@@ -59,6 +61,7 @@ impl TryFrom<CString> for Chip {
         unsafe {
             let err = quilc_parse_chip_spec_isa_json.unwrap()(ptr, &mut chip);
             crate::handle_libquil_error(err).map_err(Error::ParseChip)?;
+            let _ = CString::from_raw(ptr);
         }
 
         Ok(Chip(chip))
@@ -122,7 +125,7 @@ impl Program {
 }
 
 /// Compiles the [`Program`] for the given [`Chip`]
-pub fn compile_program(program: &Program, chip: &Chip) -> Result<Program, Error> {
+pub fn compile_program(program: &Program, chip: &Chip) -> Result<CompilationResult, Error> {
     init_libquil();
     let mut compiled_program: quil_program = std::ptr::null_mut();
 
@@ -131,21 +134,109 @@ pub fn compile_program(program: &Program, chip: &Chip) -> Result<Program, Error>
         crate::handle_libquil_error(err).map_err(Error::CompileQuil)?;
     }
 
-    Ok(Program(compiled_program))
+    Ok(CompilationResult {
+        program: Program(compiled_program),
+        metadata: None,
+    })
+}
+
+#[derive(Debug, Default, Clone)]
+pub struct CompilationMetadata {
+    pub final_rewiring: Vec<u32>,
+    pub gate_depth: Option<u32>,
+    pub multiqubit_gate_depth: Option<u32>,
+    pub gate_volume: Option<u32>,
+    pub topological_swaps: Option<u32>,
+    pub program_duration: Option<f64>,
+    pub program_fidelity: Option<f64>,
+    pub qpu_runtime_estimation: Option<f64>,
+}
+
+macro_rules! get_metadata_field {
+    ($metadata_ptr:ident, $field_name:ident, $field_type:ident) => {{
+        unsafe {
+            let mut var = $field_type::default();
+            let mut present = 0;
+
+            paste::paste!(
+            let err = [<quilc_compilation_metadata_get_ $field_name>].unwrap()(
+                $metadata_ptr,
+                std::ptr::addr_of_mut!(var) as *mut _,
+                std::ptr::addr_of_mut!(present),
+            );
+            );
+            crate::handle_libquil_error(err).map_err(Error::CompilationMetadata)?;
+
+            if present == 1 {
+                Some(var)
+            } else {
+                None
+            }
+        }
+    }};
+}
+
+impl TryFrom<quilc_compilation_metadata> for CompilationMetadata {
+    type Error = Error;
+
+    #[allow(clippy::not_unsafe_ptr_arg_deref)]
+    fn try_from(value: quilc_compilation_metadata) -> Result<Self, Self::Error> {
+        use crate::bindings::*;
+
+        let final_rewiring = unsafe {
+            let mut rewiring_ptr: *mut std::ffi::c_uint = std::ptr::null_mut();
+            let mut rewiring_len = 0;
+
+            let err = quilc_compilation_metadata_get_final_rewiring.unwrap()(
+                value,
+                std::ptr::addr_of_mut!(rewiring_ptr) as *mut _,
+                std::ptr::addr_of_mut!(rewiring_len) as *mut _,
+            );
+            crate::handle_libquil_error(err).map_err(Error::CompilationMetadata)?;
+
+            std::slice::from_raw_parts(rewiring_ptr, rewiring_len as usize).to_vec()
+        };
+
+        Ok(CompilationMetadata {
+            final_rewiring,
+            gate_depth: get_metadata_field!(value, gate_depth, u32),
+            multiqubit_gate_depth: get_metadata_field!(value, multiqubit_gate_depth, u32),
+            gate_volume: get_metadata_field!(value, gate_volume, u32),
+            topological_swaps: get_metadata_field!(value, topological_swaps, u32),
+            program_duration: get_metadata_field!(value, program_duration, f64),
+            program_fidelity: get_metadata_field!(value, program_fidelity, f64),
+            qpu_runtime_estimation: get_metadata_field!(value, qpu_runtime_estimation, f64),
+        })
+    }
+}
+
+#[derive(Debug)]
+pub struct CompilationResult {
+    pub program: Program,
+    pub metadata: Option<CompilationMetadata>,
 }
 
 /// Compiles the [`Program`] for the given [`Chip`] and restricts
 /// the resulting [`Program`] to satisfy "protoquil" constraints
-pub fn compile_protoquil(program: &Program, chip: &Chip) -> Result<Program, Error> {
+pub fn compile_protoquil(program: &Program, chip: &Chip) -> Result<CompilationResult, Error> {
     init_libquil();
     let mut compiled_program: quil_program = std::ptr::null_mut();
+    let metadata_ptr: quilc_compilation_metadata = std::ptr::null_mut();
 
     unsafe {
-        let err = quilc_compile_protoquil.unwrap()(program.0, chip.0, &mut compiled_program);
+        let err = quilc_compile_protoquil.unwrap()(
+            program.0,
+            chip.0,
+            std::ptr::addr_of!(metadata_ptr) as *mut _,
+            &mut compiled_program,
+        );
         crate::handle_libquil_error(err).map_err(Error::CompileProtoquil)?;
     }
 
-    Ok(Program(compiled_program))
+    Ok(CompilationResult {
+        program: Program(compiled_program),
+        metadata: Some(metadata_ptr.try_into()?),
+    })
 }
 
 /// Get a fully-connected 2Q [`Chip`]
@@ -181,7 +272,7 @@ pub struct ConjugatePauliByCliffordResult {
 
 pub fn conjugate_pauli_by_clifford(
     mut pauli_indices: Vec<u32>,
-    mut pauli_terms: Vec<String>,
+    pauli_terms: Vec<CString>,
     clifford: &Program,
 ) -> Result<ConjugatePauliByCliffordResult, Error> {
     init_libquil();
@@ -190,6 +281,10 @@ pub fn conjugate_pauli_by_clifford(
         let mut phase = 0;
         let phase_ptr = std::ptr::addr_of_mut!(phase);
         let pauli_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
+        let mut pauli_terms = pauli_terms
+            .into_iter()
+            .map(CString::into_raw)
+            .collect::<Vec<_>>();
         let err = quilc_conjugate_pauli_by_clifford.unwrap()(
             pauli_indices.as_mut_ptr() as *mut _,
             pauli_indices.len() as i32,
@@ -211,7 +306,7 @@ pub fn generate_rb_sequence(
     depth: i32,
     qubits: i32,
     gateset: Vec<&Program>,
-    seed: i32,
+    seed: Option<i32>,
     interleaver: Option<&Program>,
 ) -> Result<Vec<Vec<i32>>, Error> {
     init_libquil();
@@ -234,13 +329,19 @@ pub fn generate_rb_sequence(
         std::ptr::null_mut()
     };
 
+    let seed_ptr = if let Some(seed) = &seed {
+        seed as *const i32
+    } else {
+        std::ptr::null_mut()
+    };
+
     unsafe {
         let err = quilc_generate_rb_sequence.unwrap()(
             depth,
             qubits,
             gateset.as_mut_ptr() as *mut _,
             gateset.len() as i32,
-            seed,
+            seed_ptr as *mut _,
             interleaver as *mut _,
             results_ptr_ptr as *mut _,
             result_lens.as_mut_ptr() as *mut _,
@@ -266,7 +367,7 @@ pub struct VersionInfo {
 
 impl Display for VersionInfo {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "quilc {} ({})", self.version, self.githash)
+        write!(f, "{} ({})", self.version, self.githash)
     }
 }
 
@@ -295,7 +396,7 @@ pub fn get_version_info() -> Result<VersionInfo, Error> {
 
 #[cfg(test)]
 mod tests {
-    // use crate::bindings::quilc_get_version_info;
+    use std::{fs::File, io::Read};
 
     use super::*;
     use assert2::let_assert;
@@ -339,15 +440,35 @@ MEASURE 1 ro[1]
         assert!(error.contains("Unrecognized instruction"));
     }
 
+    fn read_data_file(name: &str) -> String {
+        let mut file = File::open(format!(
+            "{}/data/{}",
+            std::env::var("CARGO_MANIFEST_DIR").unwrap(),
+            name
+        ))
+        .unwrap();
+        let mut file_str = String::new();
+        file.read_to_string(&mut file_str).unwrap();
+        file_str
+    }
+
     #[test]
     fn test_compile_protoquil() {
         let program = new_quil_program();
-        let chip = get_chip().unwrap();
-        compile_protoquil(&program, &chip).unwrap();
+        let chip = Chip::from_str(&read_data_file("aspen-9-isa.json")).unwrap();
+        compile_program(&program, &chip).unwrap();
     }
 
     #[test]
     fn test_program_string() {
+        let expected: quil_rs::Program = sample_quil.parse().unwrap();
+        let program = new_quil_program();
+        let actual: quil_rs::Program = program.to_string().unwrap().parse().unwrap();
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn test_program_string_2() {
         let expected: quil_rs::Program = sample_quil.parse().unwrap();
         let program = new_quil_program();
         let actual: quil_rs::Program = program.to_string().unwrap().parse().unwrap();
@@ -362,7 +483,7 @@ MEASURE 1 ro[1]
     #[test]
     fn test_conjugate_pauli_by_clifford() {
         let pauli_indices = vec![0];
-        let x = "X".to_string();
+        let x = CString::new("X").unwrap();
         let clifford = "H 0".parse().unwrap();
 
         let expected = ConjugatePauliByCliffordResult {
@@ -381,7 +502,8 @@ MEASURE 1 ro[1]
         let interleaver = Some(&y);
 
         let expected = vec![vec![0, 1], vec![2], vec![0, 0, 0, 1], vec![2], vec![0, 1]];
-        let results = generate_rb_sequence(3, 1, vec![&phase, &h, &y], 42, interleaver).unwrap();
+        let results =
+            generate_rb_sequence(3, 1, vec![&phase, &h, &y], Some(42), interleaver).unwrap();
         assert_eq!(results, expected);
     }
 
@@ -393,7 +515,20 @@ MEASURE 1 ro[1]
         let interleaver = None;
 
         let expected = vec![vec![2, 0, 1], vec![0, 0, 0, 1], vec![0, 1]];
-        let results = generate_rb_sequence(3, 1, vec![&phase, &h, &y], 42, interleaver).unwrap();
+        let results =
+            generate_rb_sequence(3, 1, vec![&phase, &h, &y], Some(42), interleaver).unwrap();
         assert_eq!(results, expected);
+    }
+
+    #[test]
+    fn test_generate_rb_sequence_without_seed() {
+        let phase = "PHASE(pi/2) 0".parse().unwrap();
+        let h = "H 0".parse().unwrap();
+        let y = "Y 0".parse().unwrap();
+        let interleaver = None;
+
+        // When no seed is provided, quilc will use SBCL's random state (which we cannot inspect).
+        // Thus we cannot check the validity of the results -- only that we don't get an error.
+        generate_rb_sequence(3, 1, vec![&phase, &h, &y], None, interleaver).unwrap();
     }
 }
