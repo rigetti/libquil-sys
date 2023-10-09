@@ -45,6 +45,7 @@ pub(crate) fn init_libquil() {
             )
             .unwrap();
             bindings::init(ptr);
+            let _ = CString::from_raw(ptr);
         }
     })
 }

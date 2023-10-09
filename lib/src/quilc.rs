@@ -1,10 +1,11 @@
 use crate::{
     bindings::{
-        chip_specification, quil_program, quilc_build_nq_linear_chip, quilc_compilation_metadata,
-        quilc_compile_protoquil, quilc_compile_quil, quilc_conjugate_pauli_by_clifford,
-        quilc_generate_rb_sequence, quilc_get_version_info, quilc_parse_chip_spec_isa_json,
-        quilc_parse_quil, quilc_print_program, quilc_program_string, quilc_version_info,
-        quilc_version_info_githash, quilc_version_info_version,
+        self, chip_specification, quil_program, quilc_build_nq_linear_chip,
+        quilc_compilation_metadata, quilc_compile_protoquil, quilc_compile_quil,
+        quilc_conjugate_pauli_by_clifford, quilc_generate_rb_sequence, quilc_get_version_info,
+        quilc_parse_chip_spec_isa_json, quilc_parse_quil, quilc_print_program,
+        quilc_program_string, quilc_version_info, quilc_version_info_githash,
+        quilc_version_info_version,
     },
     init_libquil,
 };
@@ -76,6 +77,14 @@ impl FromStr for Chip {
     }
 }
 
+impl Drop for Chip {
+    fn drop(&mut self) {
+        unsafe {
+            bindings::lisp_release_handle.unwrap()(self.0 as *mut _);
+        }
+    }
+}
+
 /// A parsed Quil program
 #[derive(Clone, Debug)]
 pub struct Program(pub(crate) quil_program);
@@ -96,6 +105,7 @@ impl TryFrom<CString> for Program {
         unsafe {
             let err = quilc_parse_quil.unwrap()(ptr, &mut parsed_program);
             crate::handle_libquil_error(err).map_err(Error::ParseQuil)?;
+            let _ = CString::from_raw(ptr);
         }
 
         Ok(Program(parsed_program))
@@ -107,6 +117,12 @@ impl FromStr for Program {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         CString::new(s).map_err(Error::UnexpectedNul)?.try_into()
+    }
+}
+
+impl Drop for Program {
+    fn drop(&mut self) {
+        unsafe { bindings::lisp_release_handle.unwrap()(self.0 as *mut _) }
     }
 }
 
@@ -233,9 +249,14 @@ pub fn compile_protoquil(program: &Program, chip: &Chip) -> Result<CompilationRe
         crate::handle_libquil_error(err).map_err(Error::CompileProtoquil)?;
     }
 
+    let metadata = metadata_ptr.try_into()?;
+    unsafe {
+        bindings::lisp_release_handle.unwrap()(metadata_ptr as *mut _);
+    }
+
     Ok(CompilationResult {
         program: Program(compiled_program),
-        metadata: Some(metadata_ptr.try_into()?),
+        metadata: Some(metadata),
     })
 }
 
@@ -295,6 +316,12 @@ pub fn conjugate_pauli_by_clifford(
             std::ptr::addr_of!(pauli_ptr) as *mut _,
         );
         crate::handle_libquil_error(err).map_err(Error::ConjugatePauliByClifford)?;
+        let _ = pauli_terms
+            .into_iter()
+            .map(|p| {
+                let _ = CString::from_raw(p);
+            })
+            .collect::<Vec<_>>();
         Ok(ConjugatePauliByCliffordResult {
             phase,
             pauli: CStr::from_ptr(pauli_ptr).to_str()?.to_string(),

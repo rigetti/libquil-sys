@@ -95,6 +95,7 @@ impl TryFrom<HashMap<String, Vec<u32>>> for QvmMultishotAddresses {
                     indices.len() as i32,
                 );
                 handle_libquil_error(err).map_err(Error::MultishotAddresses)?;
+                let _ = CString::from_raw(name_ptr);
             }
         }
 
@@ -166,6 +167,9 @@ pub fn multishot(
                 handle_libquil_error(err).map_err(Error::Multishot)?;
                 multishot_result.push(results);
             }
+        }
+        unsafe {
+            let _ = CString::from_raw(name_ptr);
         }
     }
 
