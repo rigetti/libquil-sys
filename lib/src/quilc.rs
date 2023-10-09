@@ -398,8 +398,6 @@ pub fn get_version_info() -> Result<VersionInfo, Error> {
 mod tests {
     use std::{fs::File, io::Read};
 
-    use crate::bindings;
-
     use super::*;
     use assert2::let_assert;
 
