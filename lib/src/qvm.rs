@@ -173,6 +173,10 @@ pub fn multishot(
         }
     }
 
+    unsafe {
+        bindings::lisp_release_handle.unwrap()(result_ptr as *mut _);
+    }
+
     Ok(multishot)
 }
 
