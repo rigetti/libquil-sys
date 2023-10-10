@@ -55,17 +55,25 @@ pub fn get_version_info() -> Result<VersionInfo, Error> {
         crate::handle_libquil_error(err).map_err(Error::VersionInfo)?;
 
         let mut version_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-        let err = qvm_version_info_version.unwrap()(version_info, &mut version_ptr);
+        let err = qvm_version_info_version.unwrap()(
+            version_info,
+            std::ptr::addr_of_mut!(version_ptr) as *mut _,
+        );
         crate::handle_libquil_error(err).map_err(Error::VersionInfo)?;
 
         let mut githash_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-        let err = qvm_version_info_githash.unwrap()(version_info, &mut githash_ptr);
+        let err = qvm_version_info_githash.unwrap()(
+            version_info,
+            std::ptr::addr_of_mut!(githash_ptr) as *mut _,
+        );
         crate::handle_libquil_error(err).map_err(Error::VersionInfo)?;
 
-        Ok(VersionInfo {
-            version: CStr::from_ptr(version_ptr).to_str()?.to_string(),
-            githash: CStr::from_ptr(githash_ptr).to_str()?.to_string(),
-        })
+        let version = CStr::from_ptr(version_ptr).to_str()?.to_string();
+        let githash = CStr::from_ptr(githash_ptr).to_str()?.to_string();
+        libc::free(version_ptr as *mut _);
+        libc::free(githash_ptr as *mut _);
+
+        Ok(VersionInfo { version, githash })
     }
 }
 
