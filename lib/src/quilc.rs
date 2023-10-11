@@ -7,7 +7,7 @@ use crate::{
         quilc_program_string, quilc_version_info, quilc_version_info_githash,
         quilc_version_info_version,
     },
-    init_libquil,
+    get_string_from_pointer_and_free, init_libquil,
 };
 use std::{
     ffi::{CStr, CString},
@@ -137,8 +137,7 @@ impl Program {
                 std::ptr::addr_of_mut!(program_string_ptr) as *mut _,
             );
             crate::handle_libquil_error(err).map_err(Error::ProgramString)?;
-            let program_string = CStr::from_ptr(program_string_ptr).to_str()?.to_string();
-            libc::free(program_string_ptr as *mut _);
+            let program_string = get_string_from_pointer_and_free(program_string_ptr)?;
             Ok(program_string)
         }
     }
@@ -320,12 +319,9 @@ pub fn conjugate_pauli_by_clifford(
             std::ptr::addr_of!(pauli_ptr) as *mut _,
         );
         crate::handle_libquil_error(err).map_err(Error::ConjugatePauliByClifford)?;
-        let _ = pauli_terms
-            .into_iter()
-            .map(|p| {
-                let _ = CString::from_raw(p);
-            })
-            .collect::<Vec<_>>();
+        for p in pauli_terms {
+            let _ = CString::from_raw(p);
+        }
         Ok(ConjugatePauliByCliffordResult {
             phase,
             pauli: CStr::from_ptr(pauli_ptr).to_str()?.to_string(),
@@ -424,10 +420,8 @@ pub fn get_version_info() -> Result<VersionInfo, Error> {
         );
         crate::handle_libquil_error(err).map_err(Error::PrintProgram)?;
 
-        let version = CStr::from_ptr(version_ptr).to_str()?.to_string();
-        let githash = CStr::from_ptr(githash_ptr).to_str()?.to_string();
-        libc::free(version_ptr as *mut _);
-        libc::free(githash_ptr as *mut _);
+        let version = get_string_from_pointer_and_free(version_ptr)?;
+        let githash = get_string_from_pointer_and_free(githash_ptr)?;
 
         Ok(VersionInfo { version, githash })
     }

@@ -5,6 +5,7 @@
 use std::{
     ffi::{CStr, CString},
     path::Path,
+    str::Utf8Error,
     sync::Once,
 };
 
@@ -64,5 +65,13 @@ pub(crate) fn handle_libquil_error(errno: libquil_error_t) -> Result<(), String>
         }
         let error_str = CStr::from_ptr(error_str_ptr).to_str().unwrap();
         Err(error_str.to_string())
+    }
+}
+
+pub(crate) fn get_string_from_pointer_and_free(ptr: *mut i8) -> Result<String, Utf8Error> {
+    unsafe {
+        let s = CStr::from_ptr(ptr).to_str()?.to_string();
+        libc::free(ptr as *mut _);
+        Ok(s)
     }
 }

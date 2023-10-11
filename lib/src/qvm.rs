@@ -1,15 +1,11 @@
-use std::{
-    collections::HashMap,
-    ffi::{CStr, CString},
-    fmt::Display,
-};
+use std::{collections::HashMap, ffi::CString, fmt::Display};
 
 use crate::{
     bindings::{
         self, qvm_get_version_info, qvm_multishot_addresses, qvm_multishot_addresses_new,
         qvm_multishot_result, qvm_version_info, qvm_version_info_githash, qvm_version_info_version,
     },
-    handle_libquil_error, init_libquil, quilc,
+    get_string_from_pointer_and_free, handle_libquil_error, init_libquil, quilc,
 };
 
 #[derive(Debug, thiserror::Error)]
@@ -68,10 +64,8 @@ pub fn get_version_info() -> Result<VersionInfo, Error> {
         );
         crate::handle_libquil_error(err).map_err(Error::VersionInfo)?;
 
-        let version = CStr::from_ptr(version_ptr).to_str()?.to_string();
-        let githash = CStr::from_ptr(githash_ptr).to_str()?.to_string();
-        libc::free(version_ptr as *mut _);
-        libc::free(githash_ptr as *mut _);
+        let version = get_string_from_pointer_and_free(version_ptr)?;
+        let githash = get_string_from_pointer_and_free(githash_ptr)?;
 
         Ok(VersionInfo { version, githash })
     }
