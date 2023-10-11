@@ -1,15 +1,11 @@
-use std::{
-    collections::HashMap,
-    ffi::{CStr, CString},
-    fmt::Display,
-};
+use std::{collections::HashMap, ffi::CString, fmt::Display};
 
 use crate::{
     bindings::{
         self, qvm_get_version_info, qvm_multishot_addresses, qvm_multishot_addresses_new,
         qvm_multishot_result, qvm_version_info, qvm_version_info_githash, qvm_version_info_version,
     },
-    handle_libquil_error, init_libquil, quilc,
+    get_string_from_pointer_and_free, handle_libquil_error, init_libquil, quilc,
 };
 
 #[derive(Debug, thiserror::Error)]
@@ -55,17 +51,23 @@ pub fn get_version_info() -> Result<VersionInfo, Error> {
         crate::handle_libquil_error(err).map_err(Error::VersionInfo)?;
 
         let mut version_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-        let err = qvm_version_info_version.unwrap()(version_info, &mut version_ptr);
+        let err = qvm_version_info_version.unwrap()(
+            version_info,
+            std::ptr::addr_of_mut!(version_ptr) as *mut _,
+        );
         crate::handle_libquil_error(err).map_err(Error::VersionInfo)?;
 
         let mut githash_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-        let err = qvm_version_info_githash.unwrap()(version_info, &mut githash_ptr);
+        let err = qvm_version_info_githash.unwrap()(
+            version_info,
+            std::ptr::addr_of_mut!(githash_ptr) as *mut _,
+        );
         crate::handle_libquil_error(err).map_err(Error::VersionInfo)?;
 
-        Ok(VersionInfo {
-            version: CStr::from_ptr(version_ptr).to_str()?.to_string(),
-            githash: CStr::from_ptr(githash_ptr).to_str()?.to_string(),
-        })
+        let version = get_string_from_pointer_and_free(version_ptr)?;
+        let githash = get_string_from_pointer_and_free(githash_ptr)?;
+
+        Ok(VersionInfo { version, githash })
     }
 }
 
@@ -95,6 +97,7 @@ impl TryFrom<HashMap<String, Vec<u32>>> for QvmMultishotAddresses {
                     indices.len() as i32,
                 );
                 handle_libquil_error(err).map_err(Error::MultishotAddresses)?;
+                let _ = CString::from_raw(name_ptr);
             }
         }
 
@@ -167,6 +170,13 @@ pub fn multishot(
                 multishot_result.push(results);
             }
         }
+        unsafe {
+            let _ = CString::from_raw(name_ptr);
+        }
+    }
+
+    unsafe {
+        bindings::lisp_release_handle.unwrap()(result_ptr as *mut _);
     }
 
     Ok(multishot)

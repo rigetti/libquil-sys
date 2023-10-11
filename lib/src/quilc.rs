@@ -1,12 +1,13 @@
 use crate::{
     bindings::{
-        chip_specification, quil_program, quilc_build_nq_linear_chip, quilc_compilation_metadata,
-        quilc_compile_protoquil, quilc_compile_quil, quilc_conjugate_pauli_by_clifford,
-        quilc_generate_rb_sequence, quilc_get_version_info, quilc_parse_chip_spec_isa_json,
-        quilc_parse_quil, quilc_print_program, quilc_program_string, quilc_version_info,
-        quilc_version_info_githash, quilc_version_info_version,
+        self, chip_specification, quil_program, quilc_build_nq_linear_chip,
+        quilc_compilation_metadata, quilc_compile_protoquil, quilc_compile_quil,
+        quilc_conjugate_pauli_by_clifford, quilc_generate_rb_sequence, quilc_get_version_info,
+        quilc_parse_chip_spec_isa_json, quilc_parse_quil, quilc_print_program,
+        quilc_program_string, quilc_version_info, quilc_version_info_githash,
+        quilc_version_info_version,
     },
-    init_libquil,
+    get_string_from_pointer_and_free, init_libquil,
 };
 use std::{
     ffi::{CStr, CString},
@@ -76,6 +77,14 @@ impl FromStr for Chip {
     }
 }
 
+impl Drop for Chip {
+    fn drop(&mut self) {
+        unsafe {
+            bindings::lisp_release_handle.unwrap()(self.0 as *mut _);
+        }
+    }
+}
+
 /// A parsed Quil program
 #[derive(Clone, Debug)]
 pub struct Program(pub(crate) quil_program);
@@ -96,6 +105,7 @@ impl TryFrom<CString> for Program {
         unsafe {
             let err = quilc_parse_quil.unwrap()(ptr, &mut parsed_program);
             crate::handle_libquil_error(err).map_err(Error::ParseQuil)?;
+            let _ = CString::from_raw(ptr);
         }
 
         Ok(Program(parsed_program))
@@ -110,16 +120,25 @@ impl FromStr for Program {
     }
 }
 
+impl Drop for Program {
+    fn drop(&mut self) {
+        unsafe { bindings::lisp_release_handle.unwrap()(self.0 as *mut _) }
+    }
+}
+
 impl Program {
     pub fn to_string(&self) -> Result<String, Error> {
         init_libquil();
 
         unsafe {
             let mut program_string_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-            let err = quilc_program_string.unwrap()(self.0, &mut program_string_ptr);
+            let err = quilc_program_string.unwrap()(
+                self.0,
+                std::ptr::addr_of_mut!(program_string_ptr) as *mut _,
+            );
             crate::handle_libquil_error(err).map_err(Error::ProgramString)?;
-            let program_string = CStr::from_ptr(program_string_ptr).to_str()?;
-            Ok(program_string.to_string())
+            let program_string = get_string_from_pointer_and_free(program_string_ptr)?;
+            Ok(program_string)
         }
     }
 }
@@ -233,9 +252,14 @@ pub fn compile_protoquil(program: &Program, chip: &Chip) -> Result<CompilationRe
         crate::handle_libquil_error(err).map_err(Error::CompileProtoquil)?;
     }
 
+    let metadata = metadata_ptr.try_into()?;
+    unsafe {
+        bindings::lisp_release_handle.unwrap()(metadata_ptr as *mut _);
+    }
+
     Ok(CompilationResult {
         program: Program(compiled_program),
-        metadata: Some(metadata_ptr.try_into()?),
+        metadata: Some(metadata),
     })
 }
 
@@ -295,6 +319,9 @@ pub fn conjugate_pauli_by_clifford(
             std::ptr::addr_of!(pauli_ptr) as *mut _,
         );
         crate::handle_libquil_error(err).map_err(Error::ConjugatePauliByClifford)?;
+        for p in pauli_terms {
+            let _ = CString::from_raw(p);
+        }
         Ok(ConjugatePauliByCliffordResult {
             phase,
             pauli: CStr::from_ptr(pauli_ptr).to_str()?.to_string(),
@@ -380,17 +407,23 @@ pub fn get_version_info() -> Result<VersionInfo, Error> {
         crate::handle_libquil_error(err).map_err(Error::PrintProgram)?;
 
         let mut version_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-        let err = quilc_version_info_version.unwrap()(version_info, &mut version_ptr);
+        let err = quilc_version_info_version.unwrap()(
+            version_info,
+            std::ptr::addr_of_mut!(version_ptr) as *mut _,
+        );
         crate::handle_libquil_error(err).map_err(Error::PrintProgram)?;
 
         let mut githash_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-        let err = quilc_version_info_githash.unwrap()(version_info, &mut githash_ptr);
+        let err = quilc_version_info_githash.unwrap()(
+            version_info,
+            std::ptr::addr_of_mut!(githash_ptr) as *mut _,
+        );
         crate::handle_libquil_error(err).map_err(Error::PrintProgram)?;
 
-        Ok(VersionInfo {
-            version: CStr::from_ptr(version_ptr).to_str()?.to_string(),
-            githash: CStr::from_ptr(githash_ptr).to_str()?.to_string(),
-        })
+        let version = get_string_from_pointer_and_free(version_ptr)?;
+        let githash = get_string_from_pointer_and_free(githash_ptr)?;
+
+        Ok(VersionInfo { version, githash })
     }
 }
 
@@ -461,14 +494,6 @@ MEASURE 1 ro[1]
 
     #[test]
     fn test_program_string() {
-        let expected: quil_rs::Program = sample_quil.parse().unwrap();
-        let program = new_quil_program();
-        let actual: quil_rs::Program = program.to_string().unwrap().parse().unwrap();
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn test_program_string_2() {
         let expected: quil_rs::Program = sample_quil.parse().unwrap();
         let program = new_quil_program();
         let actual: quil_rs::Program = program.to_string().unwrap().parse().unwrap();
