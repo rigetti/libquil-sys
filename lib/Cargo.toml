@@ -1,9 +1,16 @@
 [package]
 name = "libquil-sys"
+description = "High-level bindings to libquil"
 version = "0.1.2"
 edition = "2021"
+license = "Apache-2.0"
+repository = "https://github.com/rigetti/libquil-sys"
+keywords = ["pyquil", "Quil", "libquil", "quilc", "QVM", "Rigetti"]
 links = "quilc"
 build = "build.rs"
+categories = ["compilers", "api-bindings"]
+readme = "../README.md"
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
