@@ -1,24 +1,62 @@
 use std::env;
 use std::path::PathBuf;
 
-fn main() {
-    // Get the libquil library path from users environment
-    // If unset, defaults to the standard directory for quicklisp local projects
-    // Note: Quicklisp requires that the user sets $HOME on Windows, so the default
-    // here is cross-platform.
-    let libquil_src_path = PathBuf::from(env::var("LIBQUIL_SRC_PATH").unwrap_or(format!(
-        "{}/quicklisp/local-projects/libquil",
-        env::var("HOME").expect("$HOME should be set")
-    )));
+#[derive(Debug, thiserror::Error)]
+enum Error {
+    #[error("Could not find error in any of the standard locations. Try setting C_INCLUDE_PATH or LIBQUIL_SRC_PATH")]
+    HeaderNotFound,
+    #[error("Could not read environment variable: {0}")]
+    InvalidEnvvar(#[from] env::VarError),
+}
 
-    // Tell cargo to look for shared libraries in the specified directory
-    println!("cargo:rustc-link-search={}", libquil_src_path.display());
+fn get_header_path() -> Result<PathBuf, Error> {
+    let mut paths = vec!["/usr/local/include/libquil", "/usr/include/libquil"];
+
+    let libquil_src_path: Option<&'static str> = option_env!("LIBQUIL_SRC_PATH");
+    if let Some(libquil_src_path) = libquil_src_path {
+        paths.insert(0, libquil_src_path);
+    }
+
+    let c_include_path: Option<&'static str> = option_env!("C_INCLUDE_PATH");
+    if let Some(c_include_path) = c_include_path {
+        paths.insert(0, c_include_path);
+    }
+
+    for path in paths {
+        let path = PathBuf::from(path).join("libquil.h");
+        if path.exists() {
+            return Ok(path);
+        }
+    }
+
+    Err(Error::HeaderNotFound)
+}
+
+fn get_lib_search_paths() -> Vec<String> {
+    let mut paths = vec!["/usr/local/lib".to_string(), "/usr/lib".to_string()];
+
+    let libquil_src_path: Option<&'static str> = option_env!("LIBQUIL_SRC_PATH");
+    if let Some(libquil_src_path) = libquil_src_path {
+        paths.insert(0, libquil_src_path.to_string());
+    }
+
+    paths
+}
+
+fn main() -> Result<(), Error> {
+    let libquil_header_path = get_header_path()?;
+
+    for path in get_lib_search_paths() {
+        println!("cargo:rustc-link-search={}", path);
+    }
 
     println!("cargo:rustc-link-lib=quil");
 
     // Tell cargo to rerun if the libquil implementation has changed
-    let impl_path = libquil_src_path.join("libquil.c");
-    println!("cargo:rustc-rerun-if-changed={}", impl_path.display());
+    println!(
+        "cargo:rustc-rerun-if-changed={}",
+        libquil_header_path.clone().display()
+    );
 
     // If this isn't set on MacOS, memory allocation errors occur when trying to initialize the
     // library
@@ -26,14 +64,13 @@ fn main() {
         println!("cargo:rustc-link-arg=-pagezero_size 0x100000");
     }
 
-    let header_path = libquil_src_path.join("libquil.h");
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
     let bindings = bindgen::Builder::default()
         // The input header we would like to generate
         // bindings for.
-        .header(header_path.to_string_lossy())
+        .header(libquil_header_path.to_string_lossy())
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
@@ -48,4 +85,6 @@ fn main() {
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Should be able to write bindings to file.");
+
+    Ok(())
 }
