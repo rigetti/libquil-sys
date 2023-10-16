@@ -1,3 +1,9 @@
+## 0.1.4 (2023-10-16)
+
+### Fixes
+
+#### limit number of keywords in Cargo.toml
+
 ## 0.1.3 (2023-10-16)
 
 ### Fixes
