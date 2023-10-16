@@ -1,0 +1,28 @@
+[package]
+versioned_files = ["lib/Cargo.toml"]
+changelog = "lib/CHANGELOG.md"
+
+[[workflows]]
+name = "release"
+
+[[workflows.steps]]
+type = "PrepareRelease"
+
+[[workflows.steps]]
+type = "Command"
+command = "cargo update -w"
+
+[[workflows.steps]]
+type = "Command"
+command = "git add Cargo.lock && git commit -m \"chore: prepare new release(s) [skip ci]\""
+
+[[workflows.steps]]
+type = "Command"
+command = "git push"
+
+[[workflows.steps]]
+type = "Release"
+
+[github]
+owner = "rigetti"
+repo = "libquil-sys"
