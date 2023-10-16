@@ -1,3 +1,9 @@
+## 0.1.5 (2023-10-16)
+
+### Features
+
+#### change panic to an error if cannot initialize libquil
+
 ## 0.1.4 (2023-10-16)
 
 ### Fixes
