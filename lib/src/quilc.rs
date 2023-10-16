@@ -41,6 +41,8 @@ pub enum Error {
     ProgramString(String),
     #[error("invalid UTF-8 program: {0}")]
     ProgramUtf8(#[from] std::str::Utf8Error),
+    #[error("failed to initialize libquil: {0}")]
+    FailedToInitializeLibquil(#[from] crate::Error),
 }
 /// A quilc chip specification
 #[derive(Clone, Debug)]
@@ -54,7 +56,7 @@ impl TryFrom<CString> for Chip {
     type Error = Error;
 
     fn try_from(json: CString) -> Result<Self, Self::Error> {
-        crate::init_libquil();
+        crate::init_libquil()?;
 
         let ptr = json.into_raw();
         let mut chip: chip_specification = std::ptr::null_mut();
@@ -97,7 +99,7 @@ impl TryFrom<CString> for Program {
     type Error = Error;
 
     fn try_from(program: CString) -> Result<Self, Self::Error> {
-        init_libquil();
+        init_libquil()?;
 
         let ptr = program.into_raw();
         let mut parsed_program: quil_program = std::ptr::null_mut();
@@ -128,7 +130,7 @@ impl Drop for Program {
 
 impl Program {
     pub fn to_string(&self) -> Result<String, Error> {
-        init_libquil();
+        init_libquil()?;
 
         unsafe {
             let mut program_string_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
@@ -145,7 +147,7 @@ impl Program {
 
 /// Compiles the [`Program`] for the given [`Chip`]
 pub fn compile_program(program: &Program, chip: &Chip) -> Result<CompilationResult, Error> {
-    init_libquil();
+    init_libquil()?;
     let mut compiled_program: quil_program = std::ptr::null_mut();
 
     unsafe {
@@ -238,7 +240,8 @@ pub struct CompilationResult {
 /// Compiles the [`Program`] for the given [`Chip`] and restricts
 /// the resulting [`Program`] to satisfy "protoquil" constraints
 pub fn compile_protoquil(program: &Program, chip: &Chip) -> Result<CompilationResult, Error> {
-    init_libquil();
+    init_libquil()?;
+
     let mut compiled_program: quil_program = std::ptr::null_mut();
     let metadata_ptr: quilc_compilation_metadata = std::ptr::null_mut();
 
@@ -265,7 +268,8 @@ pub fn compile_protoquil(program: &Program, chip: &Chip) -> Result<CompilationRe
 
 /// Get a fully-connected 2Q [`Chip`]
 pub fn get_chip() -> Result<Chip, Error> {
-    init_libquil();
+    init_libquil()?;
+
     let mut chip: chip_specification = std::ptr::null_mut();
 
     unsafe {
@@ -278,7 +282,7 @@ pub fn get_chip() -> Result<Chip, Error> {
 
 /// Prints the given [`Program`] to stdout
 pub fn print_program(program: &Program) -> Result<(), Error> {
-    init_libquil();
+    init_libquil()?;
 
     unsafe {
         let err = quilc_print_program.unwrap()(program.0);
@@ -299,7 +303,7 @@ pub fn conjugate_pauli_by_clifford(
     pauli_terms: Vec<CString>,
     clifford: &Program,
 ) -> Result<ConjugatePauliByCliffordResult, Error> {
-    init_libquil();
+    init_libquil()?;
 
     unsafe {
         let mut phase = 0;
@@ -336,7 +340,7 @@ pub fn generate_rb_sequence(
     seed: Option<i32>,
     interleaver: Option<&Program>,
 ) -> Result<Vec<Vec<i32>>, Error> {
-    init_libquil();
+    init_libquil()?;
 
     let mut gateset = gateset.iter().map(|p| p.0).collect::<Vec<_>>();
     let mut results_ptr: *mut std::ffi::c_int = std::ptr::null_mut();
@@ -399,7 +403,7 @@ impl Display for VersionInfo {
 }
 
 pub fn get_version_info() -> Result<VersionInfo, Error> {
-    init_libquil();
+    init_libquil()?;
 
     unsafe {
         let mut version_info: quilc_version_info = std::ptr::null_mut();

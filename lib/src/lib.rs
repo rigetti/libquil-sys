@@ -4,7 +4,7 @@
 
 use std::{
     ffi::{CStr, CString},
-    path::{Path, PathBuf},
+    path::PathBuf,
     str::Utf8Error,
     sync::Once,
 };
@@ -22,7 +22,7 @@ pub(crate) mod bindings {
 static START: Once = Once::new();
 
 #[derive(Debug, thiserror::Error)]
-enum Error {
+pub enum Error {
     #[error("Could not find libquil core file. Set the LIBQUIL_CORE_PATH environment variable.")]
     CoreFileNotFound,
 }
@@ -45,13 +45,11 @@ fn find_core_file() -> Result<String, Error> {
 }
 
 /// Initializes libquil using it's core image. No-op after the first call.
-pub(crate) fn init_libquil() {
+pub(crate) fn init_libquil() -> Result<(), Error> {
+    let core_path = find_core_file()?;
+
     START.call_once(|| {
-        let path = match find_core_file() {
-            Ok(path) => path,
-            Err(e) => panic!("{e}"),
-        };
-        let ptr = CString::new(path).unwrap().into_raw();
+        let ptr = CString::new(core_path).unwrap().into_raw();
 
         unsafe {
             // The library built by maturin does link to libquil, but
@@ -67,7 +65,9 @@ pub(crate) fn init_libquil() {
             bindings::init(ptr);
             let _ = CString::from_raw(ptr);
         }
-    })
+    });
+
+    Ok(())
 }
 
 pub(crate) fn handle_libquil_error(errno: libquil_error_t) -> Result<(), String> {

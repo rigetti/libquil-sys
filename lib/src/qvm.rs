@@ -28,6 +28,8 @@ pub enum Error {
     Wavefunction(String),
     #[error("failed to perform expectation: {0}")]
     Expectation(String),
+    #[error("failed to initialize libquil: {0}")]
+    FailedToInitializeLibquil(#[from] crate::Error),
 }
 
 #[derive(Debug)]
@@ -43,7 +45,7 @@ impl Display for VersionInfo {
 }
 
 pub fn get_version_info() -> Result<VersionInfo, Error> {
-    init_libquil();
+    init_libquil()?;
 
     unsafe {
         let mut version_info: qvm_version_info = std::ptr::null_mut();
@@ -144,7 +146,7 @@ pub fn multishot(
 ) -> Result<HashMap<String, Vec<Vec<u32>>>, Error> {
     let mut multishot = HashMap::new();
 
-    init_libquil();
+    init_libquil()?;
     let addresses: QvmMultishotAddresses = addresses.try_into()?;
     let mut result_ptr: qvm_multishot_result = std::ptr::null_mut();
 
@@ -205,7 +207,7 @@ pub fn multishot_measure(
     qubits: &[i32],
     trials: i32,
 ) -> Result<Vec<Vec<i32>>, Error> {
-    init_libquil();
+    init_libquil()?;
 
     // NOTE(mgsk): There might be a way for this to be a Vec<Vec<i32>>
     // which would exactly match our return type. In practice, however,
@@ -237,7 +239,7 @@ pub fn wavefunction(
     program: &quilc::Program,
     n_qubits: u32,
 ) -> Result<Vec<num_complex::Complex64>, Error> {
-    init_libquil();
+    init_libquil()?;
 
     let mut wavefunction = vec![0.0; 2 * 2u32.pow(n_qubits) as usize];
 
@@ -259,7 +261,7 @@ pub fn wavefunction(
 /// of finding the quantum state in `|i>`. For example, `v[2]` is the probability
 /// of finding the quantum state in `|10>`; `v[5]` the probability of `|101>`; etc.
 pub fn probabilities(program: &quilc::Program, n_qubits: u32) -> Result<Vec<f64>, Error> {
-    init_libquil();
+    init_libquil()?;
 
     let mut probabilities = vec![0.0; 2u32.pow(n_qubits) as usize];
 
@@ -277,7 +279,7 @@ pub fn expectation(
     program: &quilc::Program,
     operators: Vec<&quilc::Program>,
 ) -> Result<Vec<f64>, Error> {
-    init_libquil();
+    init_libquil()?;
 
     unsafe {
         let mut expectations = vec![0.0; operators.len()];
