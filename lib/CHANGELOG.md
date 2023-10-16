@@ -1,3 +1,13 @@
+## 0.1.2 (2023-10-16)
+
+### Fixes
+
+#### use --verbose in knope release
+
+#### bump knope version
+
+#### bump knope action to v2
+
 ## 0.1.1
 
 ### Features
