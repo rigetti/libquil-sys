@@ -1,3 +1,9 @@
+## 0.1.3 (2023-10-16)
+
+### Fixes
+
+#### add required keywords to Cargo.toml
+
 ## 0.1.2 (2023-10-16)
 
 ### Fixes
