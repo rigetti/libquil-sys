@@ -4,7 +4,7 @@
 
 use std::{
     ffi::{CStr, CString},
-    path::Path,
+    path::{Path, PathBuf},
     str::Utf8Error,
     sync::Once,
 };
@@ -21,17 +21,36 @@ pub(crate) mod bindings {
 
 static START: Once = Once::new();
 
+#[derive(Debug, thiserror::Error)]
+enum Error {
+    #[error("Could not find libquil core file. Set the LIBQUIL_CORE_PATH environment variable.")]
+    CoreFileNotFound,
+}
+
+fn find_core_file() -> Result<String, Error> {
+    let mut paths = vec!["/usr/local/lib/libquil.core", "/usr/lib/libquil.core"];
+
+    let libquil_src_path: Option<&'static str> = option_env!("LIBQUIL_CORE_PATH");
+    if let Some(libquil_src_path) = libquil_src_path {
+        paths.insert(0, libquil_src_path);
+    }
+
+    for path in paths {
+        if PathBuf::from(path).exists() {
+            return Ok(path.to_string());
+        }
+    }
+
+    Err(Error::CoreFileNotFound)
+}
+
 /// Initializes libquil using it's core image. No-op after the first call.
 pub(crate) fn init_libquil() {
     START.call_once(|| {
-        let path = match std::env::var("LIBQUIL_CORE_PATH") {
+        let path = match find_core_file() {
             Ok(path) => path,
-            Err(_) => "libquil.core".to_string(),
+            Err(e) => panic!("{e}"),
         };
-        if !Path::new(&path).exists() {
-            // TODO Make this an error rather than a panic
-            panic!("Could not find libquil core file. Do you need to set LIBQUIL_CORE_PATH environment variable?");
-        }
         let ptr = CString::new(path).unwrap().into_raw();
 
         unsafe {

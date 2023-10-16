@@ -19,6 +19,7 @@ paste = "1.0.6"
 cc = { version = "1.0", features = ["parallel"] }
 pkg-config = "0.3"
 bindgen = "0.53.1"
+thiserror = "1.0.44"
 
 [dev-dependencies]
 assert2 = "0.3.11"
