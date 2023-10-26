@@ -16,7 +16,9 @@ jobs:
       - name: Install libquil dependencies
         run: sudo apt install -y libffi\* libblas\* liblapack\*
       - name: Install libquil
-        run: 'curl https://raw.githubusercontent.com/rigetti/libquil/main/install.sh | bash -s 0.0.5'
+        run: |
+          curl https://raw.githubusercontent.com/rigetti/libquil/main/install.sh | bash -s 0.0.5
+          sudo ldconfig
       - name: Run tests
         run: |
           cd $GITHUB_WORKSPACE/lib
