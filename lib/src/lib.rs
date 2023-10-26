@@ -25,6 +25,8 @@ static START: Once = Once::new();
 pub enum Error {
     #[error("Could not find libquil core file. Set the LIBQUIL_CORE_PATH environment variable.")]
     CoreFileNotFound,
+    #[error("Unsupported Operating System: {0}")]
+    UnsupportedOperatingSystem(String),
 }
 
 fn find_core_file() -> Result<String, Error> {
@@ -47,6 +49,11 @@ fn find_core_file() -> Result<String, Error> {
 /// Initializes libquil using it's core image. No-op after the first call.
 pub(crate) fn init_libquil() -> Result<(), Error> {
     let core_path = find_core_file()?;
+    let library_name = match std::env::consts::OS {
+        "linux" => Ok("libquil.so".to_string()),
+        "macos" => Ok("libquil.dylib".to_string()),
+        os => Err(Error::UnsupportedOperatingSystem(os.to_string())),
+    }?;
 
     START.call_once(|| {
         let ptr = CString::new(core_path).unwrap().into_raw();
@@ -58,7 +65,7 @@ pub(crate) fn init_libquil() -> Result<(), Error> {
             // with the `RTLD_GLOBAL` flag which makes symbols available
             // to the whole process.
             libloading::os::unix::Library::open(
-                Some("libquil.so"),
+                Some(library_name),
                 libloading::os::unix::RTLD_NOW | libloading::os::unix::RTLD_GLOBAL,
             )
             .unwrap();
