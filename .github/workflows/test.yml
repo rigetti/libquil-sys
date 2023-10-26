@@ -1,0 +1,39 @@
+name: Test libquil-sys
+
+on:
+  pull_request:
+  push:
+    branches:
+    - 'main'
+
+jobs:
+  test-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install libquil dependencies
+        run: apt install -y libffi\* libblas\* liblapack\*
+      - name: Install libquil
+        run: 'curl https://raw.githubusercontent.com/rigetti/libquil/main/install.sh | bash -s 0.0.5'
+      - name: Run tests
+        run: |
+          cd $GITHUB_WORKSPACE/lib
+          cargo test
+
+  test-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install libquil dependencies
+        run: brew install lapack openblas
+      - name: Install libquil
+        run: 'curl https://raw.githubusercontent.com/rigetti/libquil/main/install.sh | bash -s 0.0.5'
+      - name: Run tests
+        run: |
+          cd $GITHUB_WORKSPACE/lib
+          cargo test
+
