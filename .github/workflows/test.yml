@@ -17,7 +17,7 @@ jobs:
         run: sudo apt install -y libffi\* libblas\* liblapack\*
       - name: Install libquil
         run: |
-          curl https://raw.githubusercontent.com/rigetti/libquil/main/install.sh | bash -s 0.0.6
+          curl https://raw.githubusercontent.com/rigetti/libquil/main/install.sh | bash -s 0.1.0
       - name: Run tests
         run: |
           cd $GITHUB_WORKSPACE/lib
@@ -32,7 +32,7 @@ jobs:
       - name: Install libquil dependencies
         run: brew install lapack openblas
       - name: Install libquil
-        run: 'curl https://raw.githubusercontent.com/rigetti/libquil/main/install.sh | bash -s 0.0.6'
+        run: 'curl https://raw.githubusercontent.com/rigetti/libquil/main/install.sh | bash -s 0.1.0'
       - name: Run tests
         run: |
           cd $GITHUB_WORKSPACE/lib

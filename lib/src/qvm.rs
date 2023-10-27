@@ -293,24 +293,27 @@ pub fn multishot_measure(
 ///
 /// The result is a vector of complex numbers of length `2*n_qubits`. See [`probabilities`]
 /// for a description of the interpretation of the vector indices.
-pub fn wavefunction(
-    program: &quilc::Program,
-    n_qubits: u32,
-) -> Result<Vec<num_complex::Complex64>, Error> {
+pub fn wavefunction(program: &quilc::Program) -> Result<Vec<num_complex::Complex64>, Error> {
     init_libquil()?;
 
-    let mut wavefunction = vec![0.0; 2 * 2u32.pow(n_qubits) as usize];
+    // let mut wavefunction = vec![0.0; 2 * 2u32.pow(n_qubits) as usize];
+    // let wavefunction
+    let mut results: *mut std::ffi::c_double = std::ptr::null_mut();
+    let mut results_len = 0;
 
     unsafe {
-        let err =
-            bindings::qvm_wavefunction.unwrap()(program.0, wavefunction.as_mut_ptr() as *mut _);
+        let err = bindings::qvm_wavefunction.unwrap()(
+            program.0,
+            std::ptr::addr_of_mut!(results) as *mut _,
+            std::ptr::addr_of_mut!(results_len) as *mut _,
+        );
         handle_libquil_error(err).map_err(Error::Wavefunction)?;
+        let wavefunction = std::slice::from_raw_parts(results, results_len);
+        Ok(wavefunction
+            .chunks(2)
+            .map(|c| num_complex::Complex::new(c[0], c[1]))
+            .collect::<Vec<_>>())
     }
-
-    Ok(wavefunction
-        .chunks(2)
-        .map(|c| num_complex::Complex::new(c[0], c[1]))
-        .collect::<Vec<_>>())
 }
 
 /// Calculate the probabilities for each quantum state.
@@ -456,7 +459,7 @@ mod test {
         let mut expected = vec![C0; 4];
         expected[1] = num_complex::Complex::new(1.0, 0.0);
 
-        let results = wavefunction(&program, 2).unwrap();
+        let results = wavefunction(&program).unwrap();
         assert_eq!(results, expected)
     }
 
