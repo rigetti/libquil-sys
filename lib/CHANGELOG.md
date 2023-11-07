@@ -1,3 +1,9 @@
+## 0.2.1 (2023-11-07)
+
+### Fixes
+
+#### take references to Python objects to prevent them being freed early (#54)
+
 ## 0.2.0 (2023-10-27)
 
 ### Breaking Changes
