@@ -5,7 +5,8 @@ use crate::{
         self, qvm_get_version_info, qvm_multishot_addresses, qvm_multishot_addresses_new,
         qvm_multishot_result, qvm_version_info, qvm_version_info_githash, qvm_version_info_version,
     },
-    get_string_from_pointer_and_free, handle_libquil_error, init_libquil, quilc,
+    get_string_from_pointer_and_free, handle_libquil_error, init_libquil,
+    quilc::{self, program_memory_type},
 };
 
 #[derive(Debug, thiserror::Error)]
@@ -136,6 +137,48 @@ pub enum MultishotAddressRequest {
     Indices(Vec<u32>),
 }
 
+#[derive(Debug, PartialEq)]
+pub enum MultishotAddressData {
+    Bit(Vec<Vec<u8>>),
+    Octet(Vec<Vec<u8>>),
+    Integer(Vec<Vec<u32>>),
+    Real(Vec<Vec<f64>>),
+}
+
+macro_rules! multishot_get_all {
+    ($result:ident, $name:ident, $trial:ident) => {{
+        let mut results = std::ptr::null_mut();
+        let mut results_len = 0;
+        unsafe {
+            let err = bindings::qvm_multishot_result_get_all.unwrap()(
+                $result,
+                $name,
+                $trial,
+                std::ptr::addr_of_mut!(results) as *mut _,
+                std::ptr::addr_of_mut!(results_len) as *mut _,
+            );
+            crate::handle_libquil_error(err).map_err(Error::Multishot)?;
+            (results, results_len)
+        }
+    }};
+}
+
+macro_rules! multishot_get {
+    ($result:ident, $name:ident, $trial:ident, $indices:ident, $ty:tt) => {{
+        let mut results: Vec<$ty> = vec![$ty::default(); $indices.len()];
+        unsafe {
+            let err = bindings::qvm_multishot_result_get.unwrap()(
+                $result,
+                $name,
+                $trial,
+                results.as_mut_ptr() as *mut _,
+            );
+            handle_libquil_error(err).map_err(Error::Multishot)?;
+            results
+        }
+    }};
+}
+
 /// Execute a program on the QVM and get the measurement results for the provided
 /// memory addresses
 ///
@@ -143,6 +186,7 @@ pub enum MultishotAddressRequest {
 /// ```
 /// use libquil_sys::{quilc, qvm};
 /// use std::ffi::CString;
+/// use assert2::let_assert;
 /// let program = CString::new("DECLARE ro BIT[3]; X 0; X 2; MEASURE 0 ro[0]; MEASURE 1 ro[1]; MEASURE 2 ro[2]")
 ///     .unwrap()
 ///     .try_into()
@@ -153,6 +197,7 @@ pub enum MultishotAddressRequest {
 /// // Each of the `trials`-number of elements in `ro` is a
 /// // list of the memory address values after execution.
 /// let ro = results.get("ro").unwrap();
+/// let_assert!(qvm::MultishotAddressData::Bit(ro) = ro);
 /// assert_eq!(ro[0], vec![1, 1]);
 /// ```
 ///
@@ -160,6 +205,7 @@ pub enum MultishotAddressRequest {
 /// ```
 /// use libquil_sys::{quilc, qvm};
 /// use std::ffi::CString;
+/// use assert2::let_assert;
 /// let program = CString::new("DECLARE ro BIT[3]; X 0; X 2; MEASURE 0 ro[0]; MEASURE 1 ro[1]; MEASURE 2 ro[2]")
 ///     .unwrap()
 ///     .try_into()
@@ -170,13 +216,14 @@ pub enum MultishotAddressRequest {
 /// // Each of the `trials`-number of elements in `ro` is a
 /// // list of the memory address values after execution.
 /// let ro = results.get("ro").unwrap();
+/// let_assert!(qvm::MultishotAddressData::Bit(ro) = ro);
 /// assert_eq!(ro[0], vec![1, 0, 1]);
 /// ```
 pub fn multishot(
     program: &quilc::Program,
     addresses: HashMap<String, MultishotAddressRequest>,
     trials: i32,
-) -> Result<HashMap<String, Vec<Vec<u32>>>, Error> {
+) -> Result<HashMap<String, MultishotAddressData>, Error> {
     let mut multishot = HashMap::new();
 
     init_libquil()?;
@@ -190,44 +237,88 @@ pub fn multishot(
     }
 
     for (name, address) in addresses {
+        let address_data_type =
+            program_memory_type(program, &name).map_err(|e| Error::Multishot(e.to_string()))?;
         let name_ptr = CString::new(name.clone())?.into_raw();
-        let multishot_result: &mut Vec<Vec<u32>> = multishot.entry(name).or_default();
+        let multishot_result =
+            multishot
+                .entry(name.clone())
+                .or_insert_with(|| match address_data_type {
+                    quilc::MemoryType::Bit => MultishotAddressData::Bit(vec![]),
+                    quilc::MemoryType::Octet => MultishotAddressData::Octet(vec![]),
+                    quilc::MemoryType::Integer => MultishotAddressData::Integer(vec![]),
+                    quilc::MemoryType::Real => MultishotAddressData::Real(vec![]),
+                });
 
         match address {
-            MultishotAddressRequest::All => {
-                for trial in 0..trials {
-                    unsafe {
-                        let mut results: *mut std::ffi::c_uint = std::ptr::null_mut();
-                        let mut results_len = 0;
+            MultishotAddressRequest::All => match multishot_result {
+                MultishotAddressData::Bit(result) => {
+                    for trial in 0..trials {
+                        let (results, len) = multishot_get_all!(result_ptr, name_ptr, trial);
 
-                        let err = bindings::qvm_multishot_result_get_all.unwrap()(
-                            result_ptr,
-                            name_ptr,
-                            trial,
-                            std::ptr::addr_of_mut!(results) as *mut _,
-                            std::ptr::addr_of_mut!(results_len) as *mut _,
-                        );
-                        crate::handle_libquil_error(err).map_err(Error::Multishot)?;
-                        let results_vec = std::slice::from_raw_parts(results, results_len).to_vec();
-                        multishot_result.push(results_vec);
+                        unsafe {
+                            let results_vec = std::slice::from_raw_parts(results, len).to_vec();
+                            result.push(results_vec);
+                        }
                     }
                 }
-            }
-            MultishotAddressRequest::Indices(indices) => {
-                for trial in 0..trials {
-                    unsafe {
-                        let mut results: Vec<u32> = vec![0; indices.len()];
-                        let err = bindings::qvm_multishot_result_get.unwrap()(
-                            result_ptr,
-                            name_ptr,
-                            trial,
-                            results.as_mut_ptr() as *mut _,
-                        );
-                        handle_libquil_error(err).map_err(Error::Multishot)?;
-                        multishot_result.push(results);
+                MultishotAddressData::Octet(result) => {
+                    for trial in 0..trials {
+                        let (results, len) = multishot_get_all!(result_ptr, name_ptr, trial);
+
+                        unsafe {
+                            let results_vec = std::slice::from_raw_parts(results, len).to_vec();
+                            result.push(results_vec);
+                        }
                     }
                 }
-            }
+                MultishotAddressData::Integer(result) => {
+                    for trial in 0..trials {
+                        let (results, len) = multishot_get_all!(result_ptr, name_ptr, trial);
+
+                        unsafe {
+                            let results_vec = std::slice::from_raw_parts(results, len).to_vec();
+                            result.push(results_vec);
+                        }
+                    }
+                }
+                MultishotAddressData::Real(result) => {
+                    for trial in 0..trials {
+                        let (results, len) = multishot_get_all!(result_ptr, name_ptr, trial);
+
+                        unsafe {
+                            let results_vec = std::slice::from_raw_parts(results, len).to_vec();
+                            result.push(results_vec);
+                        }
+                    }
+                }
+            },
+            MultishotAddressRequest::Indices(indices) => match multishot_result {
+                MultishotAddressData::Bit(result) => {
+                    for trial in 0..trials {
+                        let results = multishot_get!(result_ptr, name_ptr, trial, indices, u8);
+                        result.push(results);
+                    }
+                }
+                MultishotAddressData::Octet(result) => {
+                    for trial in 0..trials {
+                        let results = multishot_get!(result_ptr, name_ptr, trial, indices, u8);
+                        result.push(results);
+                    }
+                }
+                MultishotAddressData::Integer(result) => {
+                    for trial in 0..trials {
+                        let results = multishot_get!(result_ptr, name_ptr, trial, indices, u32);
+                        result.push(results);
+                    }
+                }
+                MultishotAddressData::Real(result) => {
+                    for trial in 0..trials {
+                        let results = multishot_get!(result_ptr, name_ptr, trial, indices, f64);
+                        result.push(results);
+                    }
+                }
+            },
         }
 
         unsafe {
@@ -361,7 +452,9 @@ pub fn expectation(
 
 #[cfg(test)]
 mod test {
-    use std::ffi::CString;
+    use std::{collections::HashMap, ffi::CString};
+
+    use assert2::let_assert;
 
     use crate::{
         quilc,
@@ -369,8 +462,73 @@ mod test {
     };
 
     use super::{
-        get_version_info, multishot, multishot_measure, wavefunction, MultishotAddressRequest,
+        get_version_info, multishot, multishot_measure, wavefunction, MultishotAddressData,
+        MultishotAddressRequest,
     };
+
+    #[test]
+    fn test_multishot_all_memory_types() {
+        let program: quilc::Program =
+            CString::new("DECLARE ro BIT[2]; DECLARE count INTEGER[1]; DECLARE theta REAL[2]; MOVE ro[0] 1; MOVE count[0] 10; MOVE theta[1] 4.2;")
+                .unwrap()
+                .try_into()
+                .unwrap();
+
+        let addresses = [
+            (
+                "ro".to_string(),
+                MultishotAddressRequest::Indices(vec![0, 1]),
+            ),
+            ("count".to_string(), MultishotAddressRequest::All),
+            (
+                "theta".to_string(),
+                MultishotAddressRequest::Indices(vec![1]),
+            ),
+        ]
+        .into();
+        let expected: HashMap<String, MultishotAddressData> = [
+            (
+                "ro".to_string(),
+                MultishotAddressData::Bit(vec![vec![1, 0]]),
+            ),
+            (
+                "count".to_string(),
+                MultishotAddressData::Integer(vec![vec![10]]),
+            ),
+            (
+                "theta".to_string(),
+                MultishotAddressData::Real(vec![vec![4.2]]),
+            ),
+        ]
+        .into();
+        let results = multishot(&program, addresses, 1).unwrap();
+        assert_eq!(results, expected);
+    }
+
+    #[test]
+    fn test_pyquil_multishot_failure() {
+        let program: quilc::Program = CString::new(
+            r#"DECLARE ro BIT[2]
+X 0
+X 1
+MEASURE 0 ro[0]
+MEASURE 1 ro[1]
+
+"#,
+        )
+        .unwrap()
+        .try_into()
+        .unwrap();
+
+        let addresses = [("ro".to_string(), MultishotAddressRequest::All)].into();
+        let results = multishot(&program, addresses, 1).unwrap();
+        let expected = [(
+            "ro".to_string(),
+            MultishotAddressData::Bit(vec![vec![1, 1]]),
+        )]
+        .into();
+        assert_eq!(results, expected);
+    }
 
     #[test]
     fn test_multishot_bell_state() {
@@ -387,6 +545,7 @@ mod test {
         .into();
         let results = multishot(&program, addresses, 2).unwrap();
         for (name, result) in results {
+            let_assert!(MultishotAddressData::Bit(result) = result);
             for trial in result {
                 let first = trial[0];
                 assert!(
@@ -414,6 +573,7 @@ mod test {
         .into();
         let results = multishot(&program, addresses, 2).unwrap();
         for result in results.values() {
+            let_assert!(MultishotAddressData::Bit(result) = result);
             for trial in result {
                 assert_eq!(trial, &expected);
             }
@@ -433,6 +593,7 @@ mod test {
         let addresses = [("ro".to_string(), MultishotAddressRequest::All)].into();
         let results = multishot(&program, addresses, 2).unwrap();
         for result in results.values() {
+            let_assert!(MultishotAddressData::Bit(result) = result);
             for trial in result {
                 assert_eq!(trial, &expected);
             }
