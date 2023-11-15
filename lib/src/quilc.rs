@@ -4,8 +4,8 @@ use crate::{
         quilc_compilation_metadata, quilc_compile_protoquil, quilc_compile_quil,
         quilc_conjugate_pauli_by_clifford, quilc_generate_rb_sequence, quilc_get_version_info,
         quilc_parse_chip_spec_isa_json, quilc_parse_quil, quilc_print_program,
-        quilc_program_string, quilc_version_info, quilc_version_info_githash,
-        quilc_version_info_version,
+        quilc_program_memory_type, quilc_program_string, quilc_version_info,
+        quilc_version_info_githash, quilc_version_info_version,
     },
     get_string_from_pointer_and_free, init_libquil,
 };
@@ -43,6 +43,10 @@ pub enum Error {
     ProgramUtf8(#[from] std::str::Utf8Error),
     #[error("failed to initialize libquil: {0}")]
     FailedToInitializeLibquil(#[from] crate::Error),
+    #[error("failed to get memory type in program: {0}")]
+    ProgramMemoryType(String),
+    #[error("unknown memory type: {0}")]
+    UnknownMemoryType(u32),
 }
 /// A quilc chip specification
 #[derive(Clone, Debug)]
@@ -142,6 +146,44 @@ impl Program {
             let program_string = get_string_from_pointer_and_free(program_string_ptr)?;
             Ok(program_string)
         }
+    }
+}
+
+#[derive(Debug, PartialEq)]
+pub enum MemoryType {
+    Bit,
+    Octet,
+    Integer,
+    Real,
+}
+
+impl TryFrom<i32> for MemoryType {
+    type Error = Error;
+
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value as u32 {
+            bindings::program_memory_type_t_LIBQUIL_TYPE_BIT => Ok(Self::Bit),
+            bindings::program_memory_type_t_LIBQUIL_TYPE_OCTET => Ok(Self::Octet),
+            bindings::program_memory_type_t_LIBQUIL_TYPE_INTEGER => Ok(Self::Integer),
+            bindings::program_memory_type_t_LIBQUIL_TYPE_REAL => Ok(Self::Real),
+            x => Err(Error::UnknownMemoryType(x)),
+        }
+    }
+}
+
+pub fn program_memory_type(program: &Program, region: &str) -> Result<MemoryType, Error> {
+    init_libquil()?;
+
+    unsafe {
+        let region_cstr = CString::new(region)?;
+        let mut region_type = 0;
+        let err = quilc_program_memory_type.unwrap()(
+            program.0,
+            region_cstr.into_raw(),
+            std::ptr::addr_of_mut!(region_type) as *mut _,
+        );
+        crate::handle_libquil_error(err).map_err(Error::ProgramMemoryType)?;
+        region_type.try_into()
     }
 }
 
@@ -449,6 +491,22 @@ MEASURE 1 ro[1]
 
     fn new_quil_program() -> Program {
         CString::new(sample_quil).unwrap().try_into().unwrap()
+    }
+
+    #[test]
+    fn test_program_memory_type() {
+        let program = CString::new("DECLARE ro BIT[1]; DECLARE theta REAL[1];")
+            .unwrap()
+            .try_into()
+            .unwrap();
+
+        let expected = MemoryType::Bit;
+        let memory_type = program_memory_type(&program, "ro").unwrap();
+        assert_eq!(memory_type, expected);
+
+        let expected = MemoryType::Real;
+        let memory_type = program_memory_type(&program, "theta").unwrap();
+        assert_eq!(memory_type, expected);
     }
 
     #[test]
