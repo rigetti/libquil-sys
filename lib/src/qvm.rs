@@ -557,12 +557,13 @@ mod test {
     #[test]
     fn test_pyquil_multishot_failure() {
         let program: quilc::Program = CString::new(
-            r#"DECLARE ro BIT[2]
+            r#"DECLARE ro BIT[3]
 X 0
 X 1
+X 2
 MEASURE 0 ro[0]
 MEASURE 1 ro[1]
-
+MEASURE 2 ro[2]
 "#,
         )
         .unwrap()
@@ -573,7 +574,7 @@ MEASURE 1 ro[1]
         let results = multishot(&program, addresses, 1, None, None).unwrap();
         let expected = [(
             "ro".to_string(),
-            MultishotAddressData::Bit(vec![vec![1, 1]]),
+            MultishotAddressData::Bit(vec![vec![1, 1, 1]]),
         )]
         .into();
         assert_eq!(results, expected);
@@ -627,6 +628,26 @@ MEASURE 1 ro[1]
                 assert_eq!(trial, &expected);
             }
         }
+    }
+
+    #[test]
+    fn test_multishot_with_noise() {
+        let program: quilc::Program = CString::new(
+            "DECLARE ro BIT[3]; X 0; I 1; X 2; MEASURE 0 ro[0]; MEASURE 1 ro[1]; MEASURE 2 ro[2]",
+        )
+        .unwrap()
+        .try_into()
+        .unwrap();
+
+        let gate_noise = Some((0.1, 0.0, 0.0));
+        let measurement_noise = Some((0.0, 0.0, 0.1));
+        let addresses = [(
+            "ro".to_string(),
+            MultishotAddressRequest::Indices(vec![0, 1, 2]),
+        )]
+        .into();
+        multishot(&program, addresses, 2, gate_noise, measurement_noise).unwrap();
+        // Cannot assert an expected result because noise was applied
     }
 
     #[test]
