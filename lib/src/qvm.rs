@@ -257,29 +257,28 @@ pub fn multishot(
     let addresses: QvmMultishotAddresses = addresses.try_into()?;
     let mut result_ptr: qvm_multishot_result = std::ptr::null_mut();
 
-    let gate_noise = if let Some(gate_noise) = gate_noise {
-        vec![gate_noise.0, gate_noise.1, gate_noise.2]
+    let gate_noise = gate_noise.map(|(x, y, z)| vec![x, y, z]);
+    let gate_noise_ptr: *mut std::ffi::c_double = if let Some(gate_noise) = &gate_noise {
+        gate_noise.as_ptr() as *mut _
     } else {
-        vec![0.0, 0.0, 0.0]
+        std::ptr::null_mut()
     };
 
-    let measurement_noise = if let Some(measurement_noise) = measurement_noise {
-        vec![
-            measurement_noise.0,
-            measurement_noise.1,
-            measurement_noise.2,
-        ]
-    } else {
-        vec![0.0, 0.0, 0.0]
-    };
+    let measurement_noise = measurement_noise.map(|(x, y, z)| vec![x, y, z]);
+    let measurement_noise_ptr: *mut std::ffi::c_double =
+        if let Some(measurement_noise) = &measurement_noise {
+            measurement_noise.as_ptr() as *mut _
+        } else {
+            std::ptr::null_mut()
+        };
 
     unsafe {
         let err = bindings::qvm_multishot.unwrap()(
             program.0,
             addresses.ptr,
             trials,
-            gate_noise.as_ptr() as *mut _,
-            measurement_noise.as_ptr() as *mut _,
+            gate_noise_ptr as *mut _,
+            measurement_noise_ptr as *mut _,
             &mut result_ptr,
         );
         handle_libquil_error(err).map_err(Error::Multishot)?;
@@ -647,6 +646,25 @@ MEASURE 2 ro[2]
         )]
         .into();
         multishot(&program, addresses, 2, gate_noise, measurement_noise).unwrap();
+        // Cannot assert an expected result because noise was applied
+    }
+
+    #[test]
+    fn test_multishot_with_kraus_operator() {
+        let program: quilc::Program = CString::new(
+            r#"X 1
+PRAGMA ADD-KRAUS X 1 "(1.0 0.0 0.0 1.0)"
+PRAGMA READOUT-POVM 1 "(0.9 0.2 0.1 0.8)"
+DECLARE ro BIT[1]
+MEASURE 1 ro[0]"#,
+        )
+        .unwrap()
+        .try_into()
+        .unwrap();
+
+        let addresses = [("ro".to_string(), MultishotAddressRequest::Indices(vec![0]))].into();
+
+        multishot(&program, addresses, 2, None, None).unwrap();
         // Cannot assert an expected result because noise was applied
     }
 
