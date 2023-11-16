@@ -182,6 +182,9 @@ macro_rules! multishot_get {
 /// Execute a program on the QVM and get the measurement results for the provided
 /// memory addresses
 ///
+/// The `gate_noise` and `measurement_noise` are 3-tuples (x-noise, y-noise, z-noise)
+/// which describe the noise to be applied along each respective axis.
+///
 /// # Example: specific indices
 /// ```
 /// use libquil_sys::{quilc, qvm};
@@ -218,6 +221,28 @@ macro_rules! multishot_get {
 /// let ro = results.get("ro").unwrap();
 /// let_assert!(qvm::MultishotAddressData::Bit(ro) = ro);
 /// assert_eq!(ro[0], vec![1, 0, 1]);
+/// ```
+///
+/// # Example: with noise
+/// ```
+/// use libquil_sys::{quilc, qvm};
+/// use std::ffi::CString;
+/// use assert2::let_assert;
+/// let program = CString::new("DECLARE ro BIT[3]; X 0; X 2; MEASURE 0 ro[0]; MEASURE 1 ro[1]; MEASURE 2 ro[2]")
+///     .unwrap()
+///     .try_into()
+///     .unwrap();
+/// let addresses = [("ro".to_string(), qvm::MultishotAddressRequest::Indices(vec![0, 2]))].into();
+/// let trials = 10;
+/// let gate_noise = Some((0.1, 0.2, 0.3));
+/// let measurement_noise = Some((0.1, 0.2, 0.3));
+/// let results = qvm::multishot(&program, addresses, trials, gate_noise, measurement_noise).unwrap();
+/// // Each of the `trials`-number of elements in `ro` is a
+/// // list of the memory address values after execution.
+/// let ro = results.get("ro").unwrap();
+/// let_assert!(qvm::MultishotAddressData::Bit(ro) = ro);
+/// // Because noise has been applied, the results are non-deterministic, and so, unlike the other examples
+/// // we cannot make an assertion about the readout data.
 /// ```
 pub fn multishot(
     program: &quilc::Program,
