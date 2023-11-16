@@ -1,3 +1,15 @@
+## 0.4.0 (2023-11-16)
+
+### Breaking Changes
+
+#### adds `rng_seed` parameter to QVM functions
+
+### Fixes
+
+#### provide NULL to multishot (#60)
+
+#### provide RNG seed to QVM (#62)
+
 ## 0.3.0 (2023-11-16)
 
 ### Breaking Changes
