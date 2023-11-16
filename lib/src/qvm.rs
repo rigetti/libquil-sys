@@ -196,7 +196,7 @@ macro_rules! multishot_get {
 ///     .unwrap();
 /// let addresses = [("ro".to_string(), qvm::MultishotAddressRequest::Indices(vec![0, 2]))].into();
 /// let trials = 10;
-/// let results = qvm::multishot(&program, addresses, trials, None, None).unwrap();
+/// let results = qvm::multishot(&program, addresses, trials, None, None, None).unwrap();
 /// // Each of the `trials`-number of elements in `ro` is a
 /// // list of the memory address values after execution.
 /// let ro = results.get("ro").unwrap();
@@ -215,7 +215,7 @@ macro_rules! multishot_get {
 ///     .unwrap();
 /// let addresses = [("ro".to_string(), qvm::MultishotAddressRequest::All)].into();
 /// let trials = 10;
-/// let results = qvm::multishot(&program, addresses, trials, None, None).unwrap();
+/// let results = qvm::multishot(&program, addresses, trials, None, None, None).unwrap();
 /// // Each of the `trials`-number of elements in `ro` is a
 /// // list of the memory address values after execution.
 /// let ro = results.get("ro").unwrap();
@@ -236,7 +236,7 @@ macro_rules! multishot_get {
 /// let trials = 10;
 /// let gate_noise = Some((0.1, 0.2, 0.3));
 /// let measurement_noise = Some((0.1, 0.2, 0.3));
-/// let results = qvm::multishot(&program, addresses, trials, gate_noise, measurement_noise).unwrap();
+/// let results = qvm::multishot(&program, addresses, trials, gate_noise, measurement_noise, None).unwrap();
 /// // Each of the `trials`-number of elements in `ro` is a
 /// // list of the memory address values after execution.
 /// let ro = results.get("ro").unwrap();
@@ -250,6 +250,7 @@ pub fn multishot(
     trials: i32,
     gate_noise: Option<(f64, f64, f64)>,
     measurement_noise: Option<(f64, f64, f64)>,
+    rng_seed: Option<i64>,
 ) -> Result<HashMap<String, MultishotAddressData>, Error> {
     let mut multishot = HashMap::new();
 
@@ -272,6 +273,12 @@ pub fn multishot(
             std::ptr::null_mut()
         };
 
+    let rng_seed_ptr = if let Some(rng_seed) = &rng_seed {
+        rng_seed
+    } else {
+        std::ptr::null()
+    };
+
     unsafe {
         let err = bindings::qvm_multishot.unwrap()(
             program.0,
@@ -279,6 +286,7 @@ pub fn multishot(
             trials,
             gate_noise_ptr as *mut _,
             measurement_noise_ptr as *mut _,
+            rng_seed_ptr as *mut _,
             &mut result_ptr,
         );
         handle_libquil_error(err).map_err(Error::Multishot)?;
@@ -394,7 +402,7 @@ pub fn multishot(
 ///     .unwrap();
 /// let qubits = vec![0, 2];
 /// let trials = 10;
-/// let results = qvm::multishot_measure(&program, &qubits, trials).unwrap();
+/// let results = qvm::multishot_measure(&program, &qubits, trials, None).unwrap();
 /// for (trial, measurements) in results.iter().enumerate() {
 ///     println!("Trial {trial}: [q0={}, q1={}]", measurements[0], measurements[1]);
 /// }
@@ -403,6 +411,7 @@ pub fn multishot_measure(
     program: &quilc::Program,
     qubits: &[i32],
     trials: i32,
+    rng_seed: Option<i64>,
 ) -> Result<Vec<Vec<i32>>, Error> {
     init_libquil()?;
 
@@ -413,6 +422,11 @@ pub fn multishot_measure(
     // the data after lisp had populated it.
     let mut results = vec![0; qubits.len() * trials as usize];
     let mut qubits = qubits.to_vec();
+    let rng_seed_ptr = if let Some(rng_seed) = &rng_seed {
+        rng_seed
+    } else {
+        std::ptr::null()
+    };
 
     unsafe {
         let err = bindings::qvm_multishot_measure.unwrap()(
@@ -420,6 +434,7 @@ pub fn multishot_measure(
             qubits.as_mut_ptr() as *mut _,
             qubits.len() as i32,
             trials,
+            rng_seed_ptr as *mut _,
             results.as_mut_ptr() as *mut _,
         );
         handle_libquil_error(err).map_err(Error::MultishotMeasure)?;
@@ -432,17 +447,26 @@ pub fn multishot_measure(
 ///
 /// The result is a vector of complex numbers of length `2*n_qubits`. See [`probabilities`]
 /// for a description of the interpretation of the vector indices.
-pub fn wavefunction(program: &quilc::Program) -> Result<Vec<num_complex::Complex64>, Error> {
+pub fn wavefunction(
+    program: &quilc::Program,
+    rng_seed: Option<i64>,
+) -> Result<Vec<num_complex::Complex64>, Error> {
     init_libquil()?;
 
     // let mut wavefunction = vec![0.0; 2 * 2u32.pow(n_qubits) as usize];
     // let wavefunction
     let mut results: *mut std::ffi::c_double = std::ptr::null_mut();
     let mut results_len = 0;
+    let rng_seed_ptr = if let Some(rng_seed) = &rng_seed {
+        rng_seed
+    } else {
+        std::ptr::null()
+    };
 
     unsafe {
         let err = bindings::qvm_wavefunction.unwrap()(
             program.0,
+            rng_seed_ptr as *mut _,
             std::ptr::addr_of_mut!(results) as *mut _,
             std::ptr::addr_of_mut!(results_len) as *mut _,
         );
@@ -460,14 +484,26 @@ pub fn wavefunction(program: &quilc::Program) -> Result<Vec<num_complex::Complex
 /// The result is a vector `v` of length `2^n_qubits` where `v[i]` is the probability
 /// of finding the quantum state in `|i>`. For example, `v[2]` is the probability
 /// of finding the quantum state in `|10>`; `v[5]` the probability of `|101>`; etc.
-pub fn probabilities(program: &quilc::Program, n_qubits: u32) -> Result<Vec<f64>, Error> {
+pub fn probabilities(
+    program: &quilc::Program,
+    n_qubits: u32,
+    rng_seed: Option<i64>,
+) -> Result<Vec<f64>, Error> {
     init_libquil()?;
 
     let mut probabilities = vec![0.0; 2u32.pow(n_qubits) as usize];
+    let rng_seed_ptr = if let Some(rng_seed) = &rng_seed {
+        rng_seed
+    } else {
+        std::ptr::null()
+    };
 
     unsafe {
-        let err =
-            bindings::qvm_probabilities.unwrap()(program.0, probabilities.as_mut_ptr() as *mut _);
+        let err = bindings::qvm_probabilities.unwrap()(
+            program.0,
+            rng_seed_ptr as *mut _,
+            probabilities.as_mut_ptr() as *mut _,
+        );
         handle_libquil_error(err).map_err(Error::Wavefunction)?;
     }
 
@@ -478,8 +514,15 @@ pub fn probabilities(program: &quilc::Program, n_qubits: u32) -> Result<Vec<f64>
 pub fn expectation(
     program: &quilc::Program,
     operators: Vec<&quilc::Program>,
+    rng_seed: Option<i64>,
 ) -> Result<Vec<f64>, Error> {
     init_libquil()?;
+
+    let rng_seed_ptr = if let Some(rng_seed) = &rng_seed {
+        rng_seed
+    } else {
+        std::ptr::null()
+    };
 
     unsafe {
         let mut expectations = vec![0.0; operators.len()];
@@ -491,6 +534,7 @@ pub fn expectation(
                 .collect::<Vec<_>>()
                 .as_mut_ptr() as *mut _,
             operators.len() as i32,
+            rng_seed_ptr as *mut _,
             expectations.as_mut_ptr() as *mut _,
         );
         handle_libquil_error(err).map_err(Error::Expectation)?;
@@ -549,7 +593,7 @@ mod test {
             ),
         ]
         .into();
-        let results = multishot(&program, addresses, 1, None, None).unwrap();
+        let results = multishot(&program, addresses, 1, None, None, None).unwrap();
         assert_eq!(results, expected);
     }
 
@@ -570,7 +614,7 @@ MEASURE 2 ro[2]
         .unwrap();
 
         let addresses = [("ro".to_string(), MultishotAddressRequest::All)].into();
-        let results = multishot(&program, addresses, 1, None, None).unwrap();
+        let results = multishot(&program, addresses, 1, None, None, None).unwrap();
         let expected = [(
             "ro".to_string(),
             MultishotAddressData::Bit(vec![vec![1, 1, 1]]),
@@ -592,7 +636,7 @@ MEASURE 2 ro[2]
             MultishotAddressRequest::Indices(vec![0, 1]),
         )]
         .into();
-        let results = multishot(&program, addresses, 2, None, None).unwrap();
+        let results = multishot(&program, addresses, 2, None, None, None).unwrap();
         for (name, result) in results {
             let_assert!(MultishotAddressData::Bit(result) = result);
             for trial in result {
@@ -620,7 +664,7 @@ MEASURE 2 ro[2]
             MultishotAddressRequest::Indices(vec![0, 1, 2]),
         )]
         .into();
-        let results = multishot(&program, addresses, 2, None, None).unwrap();
+        let results = multishot(&program, addresses, 2, None, None, None).unwrap();
         for result in results.values() {
             let_assert!(MultishotAddressData::Bit(result) = result);
             for trial in result {
@@ -645,7 +689,7 @@ MEASURE 2 ro[2]
             MultishotAddressRequest::Indices(vec![0, 1, 2]),
         )]
         .into();
-        multishot(&program, addresses, 2, gate_noise, measurement_noise).unwrap();
+        multishot(&program, addresses, 2, gate_noise, measurement_noise, None).unwrap();
         // Cannot assert an expected result because noise was applied
     }
 
@@ -664,7 +708,7 @@ MEASURE 1 ro[0]"#,
 
         let addresses = [("ro".to_string(), MultishotAddressRequest::Indices(vec![0]))].into();
 
-        multishot(&program, addresses, 2, None, None).unwrap();
+        multishot(&program, addresses, 2, None, None, None).unwrap();
         // Cannot assert an expected result because noise was applied
     }
 
@@ -679,7 +723,7 @@ MEASURE 1 ro[0]"#,
         let expected = vec![1, 0, 1];
 
         let addresses = [("ro".to_string(), MultishotAddressRequest::All)].into();
-        let results = multishot(&program, addresses, 2, None, None).unwrap();
+        let results = multishot(&program, addresses, 2, None, None, None).unwrap();
         for result in results.values() {
             let_assert!(MultishotAddressData::Bit(result) = result);
             for trial in result {
@@ -695,7 +739,7 @@ MEASURE 1 ro[0]"#,
         let expected = vec![1, 0];
 
         let qubits = &[0, 2];
-        let results = multishot_measure(&program, qubits, trials).unwrap();
+        let results = multishot_measure(&program, qubits, trials, None).unwrap();
         for result in results {
             assert_eq!(result, expected);
         }
@@ -708,7 +752,7 @@ MEASURE 1 ro[0]"#,
         let mut expected = vec![C0; 4];
         expected[1] = num_complex::Complex::new(1.0, 0.0);
 
-        let results = wavefunction(&program).unwrap();
+        let results = wavefunction(&program, None).unwrap();
         assert_eq!(results, expected)
     }
 
@@ -718,7 +762,7 @@ MEASURE 1 ro[0]"#,
         let mut expected = vec![0.0; 4];
         expected[1] = 1.0;
 
-        let results = probabilities(&program, 2).unwrap();
+        let results = probabilities(&program, 2, None).unwrap();
         assert_eq!(results, expected)
     }
 
@@ -730,7 +774,7 @@ MEASURE 1 ro[0]"#,
         let operators = vec![&z, &x];
         let expected = vec![1.0, 0.0];
 
-        let results = expectation(&i, operators).unwrap();
+        let results = expectation(&i, operators, None).unwrap();
         assert_eq!(results, expected)
     }
 
