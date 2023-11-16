@@ -1,3 +1,13 @@
+## 0.3.0 (2023-11-16)
+
+### Breaking Changes
+
+#### Adds two parameters `gate_noise` and `measurement_noise` to `multishot`.
+
+### Features
+
+#### support gate and measurement noise in multishot (#58)
+
 ## 0.2.2 (2023-11-15)
 
 ### Fixes
