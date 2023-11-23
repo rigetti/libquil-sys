@@ -119,11 +119,15 @@ fn codegen() -> Result<(), Error> {
 }
 
 fn main() -> Result<(), Error> {
+    println!("adding search paths");
     for path in get_lib_search_paths() {
+        println!("adding search path: {path}");
         println!("cargo:rustc-link-search={}", path);
     }
 
+    println!("setting link");
     println!("cargo:rustc-link-lib=quil");
+    println!("finished setting link");
 
     // If this isn't set on MacOS, memory allocation errors occur when trying to initialize the
     // library
