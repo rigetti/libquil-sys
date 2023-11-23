@@ -24,7 +24,6 @@ paste = "1.0.6"
 
 [build-dependencies]
 cc = { version = "1.0", features = ["parallel"] }
-pkg-config = "0.3"
 bindgen = "0.53.1"
 thiserror = "1.0.44"
 
