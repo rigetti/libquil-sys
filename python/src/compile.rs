@@ -90,17 +90,17 @@ impl PyCompilationResult {
 
 #[pyfunction]
 pub fn compile(
-    program: crate::program::PyProgram,
-    chip: crate::chip::PyChip,
-    options: Option<PyCompileOptions>,
+    program: &crate::program::PyProgram,
+    chip: &crate::chip::PyChip,
+    options: Option<&PyCompileOptions>,
 ) -> PyResult<PyCompilationResult> {
-    let protoquil = options.and_then(|e| e.into_inner().protoquil);
+    let protoquil = options.and_then(|e| e.as_inner().protoquil);
 
     let compilation_result = if let Some(true) = protoquil {
-        libquil_sys::quilc::compile_protoquil(&program.into_inner().0, &chip.into_inner().0)
+        libquil_sys::quilc::compile_protoquil(&program.as_inner().0, &chip.as_inner().0)
             .map_err(|e| crate::RustLibquilQuilcError::from(e).to_py_err())?
     } else {
-        libquil_sys::quilc::compile_program(&program.into_inner().0, &chip.into_inner().0)
+        libquil_sys::quilc::compile_program(&program.as_inner().0, &chip.as_inner().0)
             .map_err(|e| crate::RustLibquilQuilcError::from(e).to_py_err())?
     };
 

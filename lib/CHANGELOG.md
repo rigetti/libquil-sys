@@ -1,3 +1,25 @@
+## 0.3.0 (2023-11-16)
+
+### Breaking Changes
+
+#### Adds two parameters `gate_noise` and `measurement_noise` to `multishot`.
+
+### Features
+
+#### support gate and measurement noise in multishot (#58)
+
+## 0.2.2 (2023-11-15)
+
+### Fixes
+
+#### support all Quil types in multishot result (#56)
+
+## 0.2.1 (2023-11-07)
+
+### Fixes
+
+#### take references to Python objects to prevent them being freed early (#54)
+
 ## 0.2.0 (2023-10-27)
 
 ### Breaking Changes
