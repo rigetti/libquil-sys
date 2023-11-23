@@ -86,7 +86,6 @@ fn codegen() -> Result<(), Error> {
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
-    println!("Writing bindings to {}", out_path.display());
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Should be able to write bindings to file.");
@@ -111,9 +110,9 @@ fn codegen() -> Result<(), Error> {
                 .create(true)
                 .truncate(true)
                 .open(dest.clone())
-                .expect(
-                    format!("Should open file '{}' for writing", dest.to_string_lossy()).as_str(),
-                );
+                .unwrap_or_else(|_| {
+                    panic!("Should open file '{}' for writing", dest.to_string_lossy())
+                });
             writeln!(
                 file,
                 "{}",
@@ -127,15 +126,11 @@ fn codegen() -> Result<(), Error> {
 }
 
 fn main() -> Result<(), Error> {
-    eprintln!("adding search paths");
     for path in get_lib_search_paths() {
-        println!("adding search path: {path}");
         println!("cargo:rustc-link-search={}", path);
     }
 
-    eprintln!("setting link");
     println!("cargo:rustc-link-lib=quil");
-    eprintln!("finished setting link");
 
     // If this isn't set on MacOS, memory allocation errors occur when trying to initialize the
     // library
