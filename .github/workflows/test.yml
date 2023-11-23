@@ -21,6 +21,7 @@ jobs:
       - name: Run tests
         run: |
           cd $GITHUB_WORKSPACE/lib
+          echo "paths: ${LD_LIBRARY_PATH}"
           cargo test
 
   test-macos:
