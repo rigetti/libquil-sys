@@ -1,5 +1,6 @@
 use std::env;
 use std::path::PathBuf;
+use std::str::FromStr;
 
 #[derive(Debug, thiserror::Error)]
 enum Error {
@@ -32,6 +33,13 @@ fn get_header_path() -> Result<PathBuf, Error> {
     Err(Error::HeaderNotFound)
 }
 
+fn split_lib_search_paths(paths: Vec<String>) -> Vec<String> {
+    paths
+        .into_iter()
+        .flat_map(|p| p.split(':').map(Into::into).collect::<Vec<String>>())
+        .collect()
+}
+
 fn get_lib_search_paths() -> Vec<String> {
     let mut paths = vec!["/usr/local/lib".to_string(), "/usr/lib".to_string()];
 
@@ -45,7 +53,7 @@ fn get_lib_search_paths() -> Vec<String> {
         paths.insert(0, ld_library_path.to_string());
     }
 
-    paths
+    split_lib_search_paths(paths)
 }
 
 // #[cfg(feature = "codegen")]
