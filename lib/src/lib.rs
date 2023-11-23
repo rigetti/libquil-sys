@@ -16,7 +16,7 @@ pub mod qvm;
 
 #[allow(dead_code)]
 pub(crate) mod bindings {
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+    include!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/gen/bindings.rs"));
 }
 
 static START: Once = Once::new();
