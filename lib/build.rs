@@ -40,29 +40,26 @@ fn get_lib_search_paths() -> Vec<String> {
         paths.insert(0, libquil_src_path.to_string());
     }
 
+    let ld_library_path: Option<&'static str> = option_env!("LD_LIBRARY_PATH");
+    if let Some(ld_library_path) = ld_library_path {
+        paths.insert(0, ld_library_path.to_string());
+    }
+
     paths
 }
 
-fn main() -> Result<(), Error> {
+// #[cfg(feature = "codegen")]
+fn codegen() -> Result<(), Error> {
+    use std::fs::OpenOptions;
+    use std::io::Write;
+
     let libquil_header_path = get_header_path()?;
-
-    for path in get_lib_search_paths() {
-        println!("cargo:rustc-link-search={}", path);
-    }
-
-    println!("cargo:rustc-link-lib=quil");
 
     // Tell cargo to rerun if the libquil implementation has changed
     println!(
         "cargo:rustc-rerun-if-changed={}",
         libquil_header_path.clone().display()
     );
-
-    // If this isn't set on MacOS, memory allocation errors occur when trying to initialize the
-    // library
-    if cfg!(target_os = "macos") {
-        println!("cargo:rustc-link-arg=-pagezero_size 0x100000");
-    }
 
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
@@ -85,6 +82,56 @@ fn main() -> Result<(), Error> {
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Should be able to write bindings to file.");
+
+    let gen_code_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("src")
+        .join("gen");
+
+    for entry in std::fs::read_dir(PathBuf::from(&out_path))
+        .expect("OUT_DIR environment variable should point to a valid directory")
+    {
+        let src_path = entry.expect("OUT_DIR should contain files").path();
+        if src_path.to_string_lossy().ends_with(".rs") {
+            let dest = gen_code_dir.join(
+                src_path
+                    .file_name()
+                    .expect("path should include a valid file name"),
+            );
+
+            let mut file = OpenOptions::new()
+                .write(true)
+                .create(true)
+                .truncate(true)
+                .open(dest.clone())
+                .expect(
+                    format!("Should open file '{}' for writing", dest.to_string_lossy()).as_str(),
+                );
+            writeln!(
+                file,
+                "{}",
+                std::fs::read_to_string(src_path).expect("Should read file contents")
+            )
+            .expect("Should write file contents");
+        }
+    }
+
+    Ok(())
+}
+
+fn main() -> Result<(), Error> {
+    for path in get_lib_search_paths() {
+        println!("cargo:rustc-link-search={}", path);
+    }
+
+    println!("cargo:rustc-link-lib=quil");
+
+    // If this isn't set on MacOS, memory allocation errors occur when trying to initialize the
+    // library
+    if cfg!(target_os = "macos") {
+        println!("cargo:rustc-link-arg=-pagezero_size 0x100000");
+    }
+
+    codegen()?;
 
     Ok(())
 }
