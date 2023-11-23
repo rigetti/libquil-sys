@@ -8,6 +8,11 @@ extern "C" {
         unsafe extern "C" fn(result: *mut *mut ::std::os::raw::c_char) -> libquil_error_t,
     >;
 }
+pub const program_memory_type_t_LIBQUIL_TYPE_BIT: program_memory_type_t = 0;
+pub const program_memory_type_t_LIBQUIL_TYPE_OCTET: program_memory_type_t = 1;
+pub const program_memory_type_t_LIBQUIL_TYPE_INTEGER: program_memory_type_t = 2;
+pub const program_memory_type_t_LIBQUIL_TYPE_REAL: program_memory_type_t = 3;
+pub type program_memory_type_t = u32;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct quil_program__ {
@@ -152,6 +157,15 @@ extern "C" {
         unsafe extern "C" fn(
             source: *mut ::std::os::raw::c_char,
             result: *mut quil_program,
+        ) -> libquil_error_t,
+    >;
+}
+extern "C" {
+    pub static mut quilc_program_memory_type: ::std::option::Option<
+        unsafe extern "C" fn(
+            program: quil_program,
+            region_name: *mut ::std::os::raw::c_char,
+            region_type_ptr: *mut ::std::os::raw::c_void,
         ) -> libquil_error_t,
     >;
 }
@@ -453,6 +467,9 @@ extern "C" {
             program: quil_program,
             addresses: qvm_multishot_addresses,
             trials: ::std::os::raw::c_int,
+            gate_noise: *mut ::std::os::raw::c_void,
+            measurement_noise: *mut ::std::os::raw::c_void,
+            rng_seed: *mut ::std::os::raw::c_void,
             result: *mut qvm_multishot_result,
         ) -> libquil_error_t,
     >;
@@ -485,6 +502,7 @@ extern "C" {
             qubits: *mut ::std::os::raw::c_void,
             n_qubits: ::std::os::raw::c_int,
             trials: ::std::os::raw::c_int,
+            rng_seed: *mut ::std::os::raw::c_void,
             result: *mut ::std::os::raw::c_void,
         ) -> libquil_error_t,
     >;
@@ -495,6 +513,7 @@ extern "C" {
             state_prep: quil_program,
             operators: *mut ::std::os::raw::c_void,
             n_operators: ::std::os::raw::c_int,
+            rng_seed: *mut ::std::os::raw::c_void,
             results_ptr: *mut ::std::os::raw::c_void,
         ) -> libquil_error_t,
     >;
@@ -503,6 +522,7 @@ extern "C" {
     pub static mut qvm_wavefunction: ::std::option::Option<
         unsafe extern "C" fn(
             program: quil_program,
+            rng_seed: *mut ::std::os::raw::c_void,
             results_ptr: *mut ::std::os::raw::c_void,
             results_len_ptr: *mut ::std::os::raw::c_void,
         ) -> libquil_error_t,
@@ -512,6 +532,7 @@ extern "C" {
     pub static mut qvm_probabilities: ::std::option::Option<
         unsafe extern "C" fn(
             program: quil_program,
+            rng_seed: *mut ::std::os::raw::c_void,
             results_ptr: *mut ::std::os::raw::c_void,
         ) -> libquil_error_t,
     >;
