@@ -11,9 +11,9 @@ crate-type = ["cdylib", "rlib"]
 libloading = "0.8.0"
 libquil-sys = { path = "../lib" }
 # pyo3 dependencies should be updated together
-numpy = { version = "0.17.2" }
-pyo3 = { version = "0.17", features = ["extension-module"] }
-rigetti-pyo3 = "0.1.0"
+numpy = { version = "0.20" }
+pyo3 = { version = "0.20", features = ["extension-module"] }
+rigetti-pyo3 = "0.4"
 
 [build-dependencies]
-pyo3-build-config = { version = "0.17" }
+pyo3-build-config = { version = "0.20" }
