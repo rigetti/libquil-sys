@@ -19,16 +19,16 @@ libc = "0.2"
 libloading = "0.8.0"
 num-complex = "0.4.4"
 serde_json = "1.0.105"
-thiserror = "1.0.44"
+thiserror = "2.0"
 paste = "1.0.6"
 
 [build-dependencies]
 cc = { version = "1.0", features = ["parallel"] }
 pkg-config = "0.3"
-bindgen = "0.53.1"
-thiserror = "1.0.44"
+bindgen = "0.72"
+thiserror = "2.0"
 
 [dev-dependencies]
 assert2 = "0.3.11"
-quil-rs = "0.19.0"
+quil-rs = "0.32.0"
 
