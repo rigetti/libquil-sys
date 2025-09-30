@@ -1,3 +1,9 @@
+## 0.4.1 (2025-09-30)
+
+### Fixes
+
+#### update dependencies (#65)
+
 ## 0.4.0 (2023-11-16)
 
 ### Breaking Changes
