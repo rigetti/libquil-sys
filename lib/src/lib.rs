@@ -94,7 +94,7 @@ pub(crate) fn handle_libquil_error(errno: libquil_error_t) -> Result<(), String>
     }
 }
 
-pub(crate) fn get_string_from_pointer_and_free(ptr: *mut i8) -> Result<String, Utf8Error> {
+pub(crate) fn get_string_from_pointer_and_free(ptr: *mut std::os::raw::c_char) -> Result<String, Utf8Error> {
     unsafe {
         let s = CStr::from_ptr(ptr).to_str()?.to_string();
         libc::free(ptr as *mut _);
