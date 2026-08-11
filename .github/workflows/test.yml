@@ -6,6 +6,13 @@ on:
     branches:
     - 'main'
 
+env:
+  # The libquil release these bindings are built against. libquil's move to modern
+  # sbcl-librarian changed its C ABI and the set of files it installs, so this crate
+  # needs a release from after that change: 0.3.x installs neither the runtime
+  # headers nor libsbcl_librarian, and the build fails in build.rs.
+  LIBQUIL_VERSION: "0.3.0"
+
 jobs:
   test-linux:
     runs-on: ubuntu-22.04
@@ -20,14 +27,14 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Install libquil
         run: |
-          curl https://raw.githubusercontent.com/rigetti/libquil/main/install.sh | bash -s 0.3.0
+          curl https://raw.githubusercontent.com/rigetti/libquil/main/install.sh | bash -s $LIBQUIL_VERSION
       - name: Run tests
         run: |
           cd $GITHUB_WORKSPACE/lib
           cargo test
 
   test-macos:
-    runs-on: macos-15-intel
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v5
         with:
@@ -37,7 +44,7 @@ jobs:
         run: brew install lapack openblas
       - uses: dtolnay/rust-toolchain@stable
       - name: Install libquil
-        run: 'curl https://raw.githubusercontent.com/rigetti/libquil/main/install.sh | bash -s 0.3.0'
+        run: 'curl https://raw.githubusercontent.com/rigetti/libquil/main/install.sh | bash -s $LIBQUIL_VERSION'
       - name: Run tests
         run: |
           cd $GITHUB_WORKSPACE/lib
