@@ -3,7 +3,7 @@ name = "libquil"
 requires-python = ">=3.8"
 description = "Python bindings for quilc"
 license = { text = "Apache-2.0" }
-authors = [{ name = "Rigetti Computing", email = "softapps@rigetti.com" }]
+authors = [{ name = "Rigetti QPU Software", email = "qpu-software@rigetti.com" }]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "License :: OSI Approved :: Apache Software License",
