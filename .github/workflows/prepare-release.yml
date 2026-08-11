@@ -6,9 +6,17 @@ on:
       type:
         description: Bump versions and trigger a new release.
         required: true
+        # `options` only takes effect on a choice input; without this the list was
+        # inert and the field was a free-text string.
+        type: choice
         default: release
         options:
           - release
+          # Cuts an -rc version and marks the GitHub release as a prerelease, which
+          # still publishes to crates.io. Use it to make a build testable before
+          # committing to a stable version -- notably when libquil's ABI has changed
+          # and both sides need releasing together.
+          - prerelease
 
 jobs:
   prepare-release:
