@@ -16,16 +16,29 @@ enum Error {
     InvalidEnvvar(#[from] env::VarError),
 }
 
-fn get_header_path() -> Result<PathBuf, Error> {
-    let mut paths = vec!["/usr/local/include/libquil", "/usr/include/libquil"];
+/// Environment variables that select a libquil installation. They are read when the
+/// build script *runs*, so changing one takes effect without a manual `cargo clean`;
+/// `cargo:rerun-if-env-changed` is what makes cargo re-run us when they change.
+const PATH_ENVVARS: [&str; 3] = ["LIBQUIL_SRC_PATH", "LIBQUIL_LIB_PATH", "C_INCLUDE_PATH"];
 
-    let libquil_src_path: Option<&'static str> = option_env!("LIBQUIL_SRC_PATH");
-    if let Some(libquil_src_path) = libquil_src_path {
+/// The value of `name`, or `None` when it is unset or empty. An empty value is
+/// treated as unset so that `LIBQUIL_SRC_PATH= cargo build` does not put the
+/// current directory at the front of the search order.
+fn env_path(name: &str) -> Option<String> {
+    env::var(name).ok().filter(|value| !value.is_empty())
+}
+
+fn get_header_path() -> Result<PathBuf, Error> {
+    let mut paths = vec![
+        "/usr/local/include/libquil".to_string(),
+        "/usr/include/libquil".to_string(),
+    ];
+
+    if let Some(libquil_src_path) = env_path("LIBQUIL_SRC_PATH") {
         paths.insert(0, libquil_src_path);
     }
 
-    let c_include_path: Option<&'static str> = option_env!("C_INCLUDE_PATH");
-    if let Some(c_include_path) = c_include_path {
+    if let Some(c_include_path) = env_path("C_INCLUDE_PATH") {
         paths.insert(0, c_include_path);
     }
 
@@ -44,13 +57,11 @@ fn get_lib_search_paths() -> Vec<String> {
 
     // For installs that do not use /usr/local, where the headers and libraries live
     // in separate directories and LIBQUIL_SRC_PATH names only the former.
-    let libquil_lib_path: Option<&'static str> = option_env!("LIBQUIL_LIB_PATH");
-    if let Some(libquil_lib_path) = libquil_lib_path {
-        paths.insert(0, libquil_lib_path.to_string());
+    if let Some(libquil_lib_path) = env_path("LIBQUIL_LIB_PATH") {
+        paths.insert(0, libquil_lib_path);
     }
 
-    let libquil_src_path: Option<&'static str> = option_env!("LIBQUIL_SRC_PATH");
-    if let Some(libquil_src_path) = libquil_src_path {
+    if let Some(libquil_src_path) = env_path("LIBQUIL_SRC_PATH") {
         // libquil is a FASL library loaded into the libsbcl_librarian runtime, so
         // both must be found. A source tree keeps the runtime in a subdirectory;
         // an installed layout puts everything in one directory.
@@ -84,6 +95,10 @@ fn main() {
 }
 
 fn build() -> Result<(), Error> {
+    for envvar in PATH_ENVVARS {
+        println!("cargo:rerun-if-env-changed={envvar}");
+    }
+
     let libquil_header_path = get_header_path()?;
 
     for path in get_lib_search_paths() {
@@ -97,7 +112,7 @@ fn build() -> Result<(), Error> {
 
     // Tell cargo to rerun if the libquil implementation has changed
     println!(
-        "cargo:rustc-rerun-if-changed={}",
+        "cargo:rerun-if-changed={}",
         libquil_header_path.clone().display()
     );
 

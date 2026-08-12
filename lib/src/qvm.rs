@@ -54,17 +54,13 @@ pub fn get_version_info() -> Result<VersionInfo, Error> {
         crate::handle_libquil_error(err).map_err(Error::VersionInfo)?;
 
         let mut version_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-        let err = qvm_version_info_version(
-            version_info,
-            std::ptr::addr_of_mut!(version_ptr) as *mut _,
-        );
+        let err =
+            qvm_version_info_version(version_info, std::ptr::addr_of_mut!(version_ptr) as *mut _);
         crate::handle_libquil_error(err).map_err(Error::VersionInfo)?;
 
         let mut githash_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-        let err = qvm_version_info_githash(
-            version_info,
-            std::ptr::addr_of_mut!(githash_ptr) as *mut _,
-        );
+        let err =
+            qvm_version_info_githash(version_info, std::ptr::addr_of_mut!(githash_ptr) as *mut _);
         crate::handle_libquil_error(err).map_err(Error::VersionInfo)?;
 
         let version = get_string_from_pointer_and_free(version_ptr)?;
@@ -95,10 +91,8 @@ impl TryFrom<HashMap<String, MultishotAddressRequest>> for QvmMultishotAddresses
                 let name_ptr = CString::new(name.clone())?.into_raw();
                 match address {
                     MultishotAddressRequest::All => {
-                        let err = bindings::qvm_multishot_addresses_set_all(
-                            addresses_ptr,
-                            name_ptr,
-                        );
+                        let err =
+                            bindings::qvm_multishot_addresses_set_all(addresses_ptr, name_ptr);
                         handle_libquil_error(err).map_err(Error::MultishotAddresses)?;
                     }
                     MultishotAddressRequest::Indices(indices) => {

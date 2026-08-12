@@ -138,10 +138,8 @@ impl Program {
 
         unsafe {
             let mut program_string_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-            let err = quilc_program_string(
-                self.0,
-                std::ptr::addr_of_mut!(program_string_ptr) as *mut _,
-            );
+            let err =
+                quilc_program_string(self.0, std::ptr::addr_of_mut!(program_string_ptr) as *mut _);
             crate::handle_libquil_error(err).map_err(Error::ProgramString)?;
             let program_string = get_string_from_pointer_and_free(program_string_ptr)?;
             Ok(program_string)
@@ -453,17 +451,13 @@ pub fn get_version_info() -> Result<VersionInfo, Error> {
         crate::handle_libquil_error(err).map_err(Error::PrintProgram)?;
 
         let mut version_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-        let err = quilc_version_info_version(
-            version_info,
-            std::ptr::addr_of_mut!(version_ptr) as *mut _,
-        );
+        let err =
+            quilc_version_info_version(version_info, std::ptr::addr_of_mut!(version_ptr) as *mut _);
         crate::handle_libquil_error(err).map_err(Error::PrintProgram)?;
 
         let mut githash_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-        let err = quilc_version_info_githash(
-            version_info,
-            std::ptr::addr_of_mut!(githash_ptr) as *mut _,
-        );
+        let err =
+            quilc_version_info_githash(version_info, std::ptr::addr_of_mut!(githash_ptr) as *mut _);
         crate::handle_libquil_error(err).map_err(Error::PrintProgram)?;
 
         let version = get_string_from_pointer_and_free(version_ptr)?;
