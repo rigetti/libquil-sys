@@ -14,37 +14,8 @@ command = "cargo update -w"
 
 [[workflows.steps]]
 type = "Command"
+shell = true
 command = "git add Cargo.lock && git commit -m \"chore: prepare new release(s) [skip ci]\""
-
-[[workflows.steps]]
-type = "Command"
-command = "git push"
-
-[[workflows.steps]]
-type = "Release"
-
-# Same as "release", but produces a prerelease version (e.g. 0.5.0-rc.1) and marks
-# the GitHub release as a prerelease. Publishing that to crates.io is safe: Cargo
-# never resolves a prerelease unless a dependant asks for it by name, so it is the
-# way to make a build available for testing before committing to a stable version.
-#
-# This exists because libquil-sys is only usable with a matching libquil, so a
-# breaking change to libquil's ABI has to be published somewhere testable before
-# either side can be released for real.
-[[workflows]]
-name = "prerelease"
-
-[[workflows.steps]]
-type = "PrepareRelease"
-prerelease_label = "rc"
-
-[[workflows.steps]]
-type = "Command"
-command = "cargo update -w"
-
-[[workflows.steps]]
-type = "Command"
-command = "git add Cargo.lock && git commit -m \"chore: prepare new prerelease(s) [skip ci]\""
 
 [[workflows.steps]]
 type = "Command"
