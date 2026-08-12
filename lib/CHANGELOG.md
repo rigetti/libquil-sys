@@ -1,3 +1,9 @@
+## 0.5.0-rc.0 (2026-08-12)
+
+### Breaking Changes
+
+#### build against libquil on modern sbcl-librarian
+
 ## 0.4.2 (2026-05-21)
 
 ### Fixes
