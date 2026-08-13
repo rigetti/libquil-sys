@@ -11,16 +11,11 @@ env:
   # sbcl-librarian changed its C ABI and the set of files it installs, so this crate
   # needs a release from after that change: 0.3.x installs neither the runtime
   # headers nor libsbcl_librarian, and the build fails in build.rs.
-  LIBQUIL_VERSION: "0.4.0-rc.1"
-  # install.sh is fetched from this ref of libquil. It has to match the release
+  LIBQUIL_VERSION: "0.4.0-rc.0"
+  # install.sh is fetched from the tag being installed. It has to match the release
   # above: the installer that ships with a release knows which files that release
   # contains, and the modern-sbcl-librarian layout added the runtime directory.
-  LIBQUIL_INSTALL_REF: "sbcl-librarian-runtime"
-  # Temporary, until the libquil change is merged and released from rigetti/libquil:
-  # the prerelease with the new ABI is published from a fork, and install.sh has to
-  # be fetched from the same place so it knows which files that release contains.
-  LIBQUIL_INSTALL_REPO: "BatmanAoD/libquil"
-  LIBQUIL_RELEASE_REPO: "BatmanAoD/libquil"
+  LIBQUIL_INSTALL_REF: "v0.4.0-rc.0"
 
 jobs:
   test-linux:
@@ -36,7 +31,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Install libquil
         run: |
-          curl https://raw.githubusercontent.com/$LIBQUIL_INSTALL_REPO/$LIBQUIL_INSTALL_REF/install.sh | bash -s $LIBQUIL_VERSION
+          curl https://raw.githubusercontent.com/rigetti/libquil/$LIBQUIL_INSTALL_REF/install.sh | bash -s $LIBQUIL_VERSION
       - name: Run tests
         run: |
           cd $GITHUB_WORKSPACE/lib
@@ -53,7 +48,7 @@ jobs:
         run: brew install lapack openblas
       - uses: dtolnay/rust-toolchain@stable
       - name: Install libquil
-        run: 'curl https://raw.githubusercontent.com/$LIBQUIL_INSTALL_REPO/$LIBQUIL_INSTALL_REF/install.sh | bash -s $LIBQUIL_VERSION'
+        run: 'curl https://raw.githubusercontent.com/rigetti/libquil/$LIBQUIL_INSTALL_REF/install.sh | bash -s $LIBQUIL_VERSION'
       - name: Run tests
         run: |
           cd $GITHUB_WORKSPACE/lib
