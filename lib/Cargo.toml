@@ -20,7 +20,7 @@ libloading = { workspace = true }
 num-complex = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }
-paste = { workspace = true }
+pastey = { workspace = true }
 
 [build-dependencies]
 cc = { workspace = true, features = ["parallel"] }
