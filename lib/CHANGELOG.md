@@ -1,3 +1,10 @@
+## 0.5.1 (2026-08-26)
+
+### Fixes
+
+- #70: use pastey
+- #71: upgrade PyO3
+
 ## 0.5.0 (2026-08-26)
 
 ### Breaking Changes
