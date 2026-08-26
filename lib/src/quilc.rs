@@ -219,7 +219,7 @@ macro_rules! get_metadata_field {
             let mut var = $field_type::default();
             let mut present = 0;
 
-            paste::paste!(
+            pastey::paste!(
             let err = [<quilc_compilation_metadata_get_ $field_name>](
                 $metadata_ptr,
                 std::ptr::addr_of_mut!(var) as *mut _,
