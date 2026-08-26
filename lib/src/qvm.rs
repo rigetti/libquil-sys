@@ -50,21 +50,17 @@ pub fn get_version_info() -> Result<VersionInfo, Error> {
 
     unsafe {
         let mut version_info: qvm_version_info = std::ptr::null_mut();
-        let err = qvm_get_version_info.unwrap()(&mut version_info);
+        let err = qvm_get_version_info(&mut version_info);
         crate::handle_libquil_error(err).map_err(Error::VersionInfo)?;
 
         let mut version_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-        let err = qvm_version_info_version.unwrap()(
-            version_info,
-            std::ptr::addr_of_mut!(version_ptr) as *mut _,
-        );
+        let err =
+            qvm_version_info_version(version_info, std::ptr::addr_of_mut!(version_ptr) as *mut _);
         crate::handle_libquil_error(err).map_err(Error::VersionInfo)?;
 
         let mut githash_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-        let err = qvm_version_info_githash.unwrap()(
-            version_info,
-            std::ptr::addr_of_mut!(githash_ptr) as *mut _,
-        );
+        let err =
+            qvm_version_info_githash(version_info, std::ptr::addr_of_mut!(githash_ptr) as *mut _);
         crate::handle_libquil_error(err).map_err(Error::VersionInfo)?;
 
         let version = get_string_from_pointer_and_free(version_ptr)?;
@@ -86,7 +82,7 @@ impl TryFrom<HashMap<String, MultishotAddressRequest>> for QvmMultishotAddresses
         let mut addresses_ptr: qvm_multishot_addresses = std::ptr::null_mut();
 
         unsafe {
-            let err = qvm_multishot_addresses_new.unwrap()(&mut addresses_ptr);
+            let err = qvm_multishot_addresses_new(&mut addresses_ptr);
             handle_libquil_error(err).map_err(Error::MultishotAddresses)?;
         }
 
@@ -95,14 +91,12 @@ impl TryFrom<HashMap<String, MultishotAddressRequest>> for QvmMultishotAddresses
                 let name_ptr = CString::new(name.clone())?.into_raw();
                 match address {
                     MultishotAddressRequest::All => {
-                        let err = bindings::qvm_multishot_addresses_set_all.unwrap()(
-                            addresses_ptr,
-                            name_ptr,
-                        );
+                        let err =
+                            bindings::qvm_multishot_addresses_set_all(addresses_ptr, name_ptr);
                         handle_libquil_error(err).map_err(Error::MultishotAddresses)?;
                     }
                     MultishotAddressRequest::Indices(indices) => {
-                        let err = bindings::qvm_multishot_addresses_set.unwrap()(
+                        let err = bindings::qvm_multishot_addresses_set(
                             addresses_ptr,
                             name_ptr,
                             indices.to_vec().as_mut_ptr() as *mut _,
@@ -150,7 +144,7 @@ macro_rules! multishot_get_all {
         let mut results = std::ptr::null_mut();
         let mut results_len = 0;
         unsafe {
-            let err = bindings::qvm_multishot_result_get_all.unwrap()(
+            let err = bindings::qvm_multishot_result_get_all(
                 $result,
                 $name,
                 $trial,
@@ -167,7 +161,7 @@ macro_rules! multishot_get {
     ($result:ident, $name:ident, $trial:ident, $indices:ident, $ty:tt) => {{
         let mut results: Vec<$ty> = vec![$ty::default(); $indices.len()];
         unsafe {
-            let err = bindings::qvm_multishot_result_get.unwrap()(
+            let err = bindings::qvm_multishot_result_get(
                 $result,
                 $name,
                 $trial,
@@ -280,7 +274,7 @@ pub fn multishot(
     };
 
     unsafe {
-        let err = bindings::qvm_multishot.unwrap()(
+        let err = bindings::qvm_multishot(
             program.0,
             addresses.ptr,
             trials,
@@ -383,7 +377,7 @@ pub fn multishot(
     }
 
     unsafe {
-        bindings::lisp_release_handle.unwrap()(result_ptr as *mut _);
+        bindings::lisp_release_handle(result_ptr as *mut _);
     }
 
     Ok(multishot)
@@ -429,7 +423,7 @@ pub fn multishot_measure(
     };
 
     unsafe {
-        let err = bindings::qvm_multishot_measure.unwrap()(
+        let err = bindings::qvm_multishot_measure(
             program.0,
             qubits.as_mut_ptr() as *mut _,
             qubits.len() as i32,
@@ -464,7 +458,7 @@ pub fn wavefunction(
     };
 
     unsafe {
-        let err = bindings::qvm_wavefunction.unwrap()(
+        let err = bindings::qvm_wavefunction(
             program.0,
             rng_seed_ptr as *mut _,
             std::ptr::addr_of_mut!(results) as *mut _,
@@ -499,7 +493,7 @@ pub fn probabilities(
     };
 
     unsafe {
-        let err = bindings::qvm_probabilities.unwrap()(
+        let err = bindings::qvm_probabilities(
             program.0,
             rng_seed_ptr as *mut _,
             probabilities.as_mut_ptr() as *mut _,
@@ -526,7 +520,7 @@ pub fn expectation(
 
     unsafe {
         let mut expectations = vec![0.0; operators.len()];
-        let err = bindings::qvm_expectation.unwrap()(
+        let err = bindings::qvm_expectation(
             program.0,
             operators
                 .iter()

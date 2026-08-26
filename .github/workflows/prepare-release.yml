@@ -1,33 +1,48 @@
 name: Prepare Release
 
 on:
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
-    inputs:
-      type:
-        description: Bump versions and trigger a new release.
-        required: true
-        default: release
-        options:
-          - release
 
 jobs:
   prepare-release:
     runs-on: ubuntu-22.04
-    env:
-      GITHUB_TOKEN: ${{ secrets.PAT }}
     steps:
     - uses: actions/checkout@v5
       with:
         fetch-depth: 0
+        # Release from the ref this was dispatched on, so a prerelease cut from a
+        # branch tags that branch rather than the default one.
+        ref: ${{ github.ref }}
         token: ${{ secrets.PAT }}
     - name: Install Knope
-      uses: knope-dev/action@v2.1.0
+      uses: knope-dev/action@v2.1.2
       with:
-        version: 0.10.0 # Test before updating, breaking changes likely: https://github.com/knope-dev/action#install-latest-version
+        version: 0.23.0 # Test before updating, breaking changes likely: https://github.com/knope-dev/action#install-latest-version
     - run: |
         git config --global user.name "${{ github.triggering_actor }}"
         git config --global user.email "${{ github.triggering_actor}}@users.noreply.github.com"
-    - name: Prepare Release
-      run: knope ${{ inputs.type }} --verbose
-      if: github.event_name == 'workflow_dispatch'
 
+    # On a pull request, only show what a release would do.
+    - name: Dry-run Release
+      if: github.event_name == 'pull_request'
+      run: knope release --verbose --dry-run
+
+    - name: Prepare Release
+      if: github.event_name == 'workflow_dispatch'
+      env:
+        # The Release step authenticates with this rather than an argument.
+        GITHUB_TOKEN: ${{ secrets.PAT }}
+      run: |
+        set -euo pipefail
+
+        # A release off main is a real one; anywhere else it can only be a
+        # prerelease, which is how a change that needs a matching libquil release
+        # gets published for testing before either side is final.
+        if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
+          knope release --verbose
+        else
+          knope release --verbose --prerelease-label=rc
+        fi

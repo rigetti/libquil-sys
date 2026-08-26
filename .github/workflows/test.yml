@@ -6,6 +6,10 @@ on:
     branches:
     - 'main'
 
+env:
+  # The libquil release these bindings are built against.
+  LIBQUIL_VERSION: "0.4.1"
+
 jobs:
   test-linux:
     runs-on: ubuntu-22.04
@@ -15,29 +19,28 @@ jobs:
           fetch-depth: 0
           # test that PAT works
           token: ${{ secrets.PAT }}
-      - name: Install libquil dependencies
-        run: sudo apt install -y libffi\* libblas\* liblapack\*
       - uses: dtolnay/rust-toolchain@stable
       - name: Install libquil
         run: |
-          curl https://raw.githubusercontent.com/rigetti/libquil/main/install.sh | bash -s 0.3.0
+          curl -fsSL "https://raw.githubusercontent.com/rigetti/libquil/v$LIBQUIL_VERSION/scripts/install.sh" \
+            | sudo -E bash -s -- --install-deps "$LIBQUIL_VERSION"
       - name: Run tests
         run: |
           cd $GITHUB_WORKSPACE/lib
           cargo test
 
   test-macos:
-    runs-on: macos-15-intel
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.PAT }}
-      - name: Install libquil dependencies
-        run: brew install lapack openblas
       - uses: dtolnay/rust-toolchain@stable
       - name: Install libquil
-        run: 'curl https://raw.githubusercontent.com/rigetti/libquil/main/install.sh | bash -s 0.3.0'
+        run: |
+          curl -fsSL "https://raw.githubusercontent.com/rigetti/libquil/v$LIBQUIL_VERSION/scripts/install.sh" \
+            | sudo -E bash -s -- --install-deps "$LIBQUIL_VERSION"
       - name: Run tests
         run: |
           cd $GITHUB_WORKSPACE/lib

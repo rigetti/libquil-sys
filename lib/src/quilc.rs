@@ -66,7 +66,7 @@ impl TryFrom<CString> for Chip {
         let mut chip: chip_specification = std::ptr::null_mut();
 
         unsafe {
-            let err = quilc_parse_chip_spec_isa_json.unwrap()(ptr, &mut chip);
+            let err = quilc_parse_chip_spec_isa_json(ptr, &mut chip);
             crate::handle_libquil_error(err).map_err(Error::ParseChip)?;
             let _ = CString::from_raw(ptr);
         }
@@ -86,7 +86,7 @@ impl FromStr for Chip {
 impl Drop for Chip {
     fn drop(&mut self) {
         unsafe {
-            bindings::lisp_release_handle.unwrap()(self.0 as *mut _);
+            bindings::lisp_release_handle(self.0 as *mut _);
         }
     }
 }
@@ -109,7 +109,7 @@ impl TryFrom<CString> for Program {
         let mut parsed_program: quil_program = std::ptr::null_mut();
 
         unsafe {
-            let err = quilc_parse_quil.unwrap()(ptr, &mut parsed_program);
+            let err = quilc_parse_quil(ptr, &mut parsed_program);
             crate::handle_libquil_error(err).map_err(Error::ParseQuil)?;
             let _ = CString::from_raw(ptr);
         }
@@ -128,7 +128,7 @@ impl FromStr for Program {
 
 impl Drop for Program {
     fn drop(&mut self) {
-        unsafe { bindings::lisp_release_handle.unwrap()(self.0 as *mut _) }
+        unsafe { bindings::lisp_release_handle(self.0 as *mut _) };
     }
 }
 
@@ -138,10 +138,8 @@ impl Program {
 
         unsafe {
             let mut program_string_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-            let err = quilc_program_string.unwrap()(
-                self.0,
-                std::ptr::addr_of_mut!(program_string_ptr) as *mut _,
-            );
+            let err =
+                quilc_program_string(self.0, std::ptr::addr_of_mut!(program_string_ptr) as *mut _);
             crate::handle_libquil_error(err).map_err(Error::ProgramString)?;
             let program_string = get_string_from_pointer_and_free(program_string_ptr)?;
             Ok(program_string)
@@ -177,7 +175,7 @@ pub fn program_memory_type(program: &Program, region: &str) -> Result<MemoryType
     unsafe {
         let region_cstr = CString::new(region)?;
         let mut region_type = 0;
-        let err = quilc_program_memory_type.unwrap()(
+        let err = quilc_program_memory_type(
             program.0,
             region_cstr.into_raw(),
             std::ptr::addr_of_mut!(region_type) as *mut _,
@@ -193,7 +191,7 @@ pub fn compile_program(program: &Program, chip: &Chip) -> Result<CompilationResu
     let mut compiled_program: quil_program = std::ptr::null_mut();
 
     unsafe {
-        let err = quilc_compile_quil.unwrap()(program.0, chip.0, &mut compiled_program);
+        let err = quilc_compile_quil(program.0, chip.0, &mut compiled_program);
         crate::handle_libquil_error(err).map_err(Error::CompileQuil)?;
     }
 
@@ -222,7 +220,7 @@ macro_rules! get_metadata_field {
             let mut present = 0;
 
             paste::paste!(
-            let err = [<quilc_compilation_metadata_get_ $field_name>].unwrap()(
+            let err = [<quilc_compilation_metadata_get_ $field_name>](
                 $metadata_ptr,
                 std::ptr::addr_of_mut!(var) as *mut _,
                 std::ptr::addr_of_mut!(present),
@@ -250,7 +248,7 @@ impl TryFrom<quilc_compilation_metadata> for CompilationMetadata {
             let mut rewiring_ptr: *mut std::ffi::c_uint = std::ptr::null_mut();
             let mut rewiring_len = 0;
 
-            let err = quilc_compilation_metadata_get_final_rewiring.unwrap()(
+            let err = quilc_compilation_metadata_get_final_rewiring(
                 value,
                 std::ptr::addr_of_mut!(rewiring_ptr) as *mut _,
                 std::ptr::addr_of_mut!(rewiring_len) as *mut _,
@@ -288,7 +286,7 @@ pub fn compile_protoquil(program: &Program, chip: &Chip) -> Result<CompilationRe
     let metadata_ptr: quilc_compilation_metadata = std::ptr::null_mut();
 
     unsafe {
-        let err = quilc_compile_protoquil.unwrap()(
+        let err = quilc_compile_protoquil(
             program.0,
             chip.0,
             std::ptr::addr_of!(metadata_ptr) as *mut _,
@@ -299,7 +297,7 @@ pub fn compile_protoquil(program: &Program, chip: &Chip) -> Result<CompilationRe
 
     let metadata = metadata_ptr.try_into()?;
     unsafe {
-        bindings::lisp_release_handle.unwrap()(metadata_ptr as *mut _);
+        bindings::lisp_release_handle(metadata_ptr as *mut _);
     }
 
     Ok(CompilationResult {
@@ -315,7 +313,7 @@ pub fn get_chip() -> Result<Chip, Error> {
     let mut chip: chip_specification = std::ptr::null_mut();
 
     unsafe {
-        let err = quilc_build_nq_linear_chip.unwrap()(2, &mut chip);
+        let err = quilc_build_nq_linear_chip(2, &mut chip);
         crate::handle_libquil_error(err).map_err(Error::BuildNqLinearChip)?;
     }
 
@@ -327,7 +325,7 @@ pub fn print_program(program: &Program) -> Result<(), Error> {
     init_libquil()?;
 
     unsafe {
-        let err = quilc_print_program.unwrap()(program.0);
+        let err = quilc_print_program(program.0);
         crate::handle_libquil_error(err).map_err(Error::PrintProgram)?;
     }
 
@@ -355,7 +353,7 @@ pub fn conjugate_pauli_by_clifford(
             .into_iter()
             .map(CString::into_raw)
             .collect::<Vec<_>>();
-        let err = quilc_conjugate_pauli_by_clifford.unwrap()(
+        let err = quilc_conjugate_pauli_by_clifford(
             pauli_indices.as_mut_ptr() as *mut _,
             pauli_indices.len() as i32,
             pauli_terms.as_mut_ptr() as *mut _,
@@ -409,7 +407,7 @@ pub fn generate_rb_sequence(
     };
 
     unsafe {
-        let err = quilc_generate_rb_sequence.unwrap()(
+        let err = quilc_generate_rb_sequence(
             depth,
             qubits,
             gateset.as_mut_ptr() as *mut _,
@@ -449,21 +447,17 @@ pub fn get_version_info() -> Result<VersionInfo, Error> {
 
     unsafe {
         let mut version_info: quilc_version_info = std::ptr::null_mut();
-        let err = quilc_get_version_info.unwrap()(&mut version_info);
+        let err = quilc_get_version_info(&mut version_info);
         crate::handle_libquil_error(err).map_err(Error::PrintProgram)?;
 
         let mut version_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-        let err = quilc_version_info_version.unwrap()(
-            version_info,
-            std::ptr::addr_of_mut!(version_ptr) as *mut _,
-        );
+        let err =
+            quilc_version_info_version(version_info, std::ptr::addr_of_mut!(version_ptr) as *mut _);
         crate::handle_libquil_error(err).map_err(Error::PrintProgram)?;
 
         let mut githash_ptr: *mut std::os::raw::c_char = std::ptr::null_mut();
-        let err = quilc_version_info_githash.unwrap()(
-            version_info,
-            std::ptr::addr_of_mut!(githash_ptr) as *mut _,
-        );
+        let err =
+            quilc_version_info_githash(version_info, std::ptr::addr_of_mut!(githash_ptr) as *mut _);
         crate::handle_libquil_error(err).map_err(Error::PrintProgram)?;
 
         let version = get_string_from_pointer_and_free(version_ptr)?;
