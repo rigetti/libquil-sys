@@ -1,3 +1,13 @@
+## 0.5.0 (2026-08-26)
+
+### Breaking Changes
+
+- build against libquil on modern sbcl-librarian
+
+### Fixes
+
+- read libquil path envvars at build-script runtime
+
 ## 0.4.2 (2026-05-21)
 
 ### Fixes
