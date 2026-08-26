@@ -7,17 +7,8 @@ on:
     - 'main'
 
 env:
-  # The libquil release these bindings are built against. libquil's move to modern
-  # sbcl-librarian changed its C ABI and the set of files it installs, so this crate
-  # needs a release from after that change: 0.3.x installs neither the runtime
-  # headers nor libsbcl_librarian, and the build fails in build.rs.
+  # The libquil release these bindings are built against.
   LIBQUIL_VERSION: "0.4.0"
-  # install.sh is fetched from the tag being installed. It has to match the release
-  # above: the installer that ships with a release knows which files that release
-  # contains, and the modern-sbcl-librarian layout added the runtime directory.
-  # TODO(github.com/rigetti/libquil#58): once that is merged, this can track main
-  # and LIBQUIL_VERSION can go, letting the installer take the latest release.
-  LIBQUIL_INSTALL_REF: "v0.4.0"
 
 jobs:
   test-linux:
@@ -31,7 +22,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Install libquil
         run: |
-          curl -fsSL "https://raw.githubusercontent.com/rigetti/libquil/$LIBQUIL_INSTALL_REF/scripts/install.sh" \
+          curl -fsSL "https://raw.githubusercontent.com/rigetti/libquil/v$LIBQUIL_VERSION/scripts/install.sh" \
             | sudo -E bash -s -- --install-deps "$LIBQUIL_VERSION"
       - name: Run tests
         run: |
@@ -48,7 +39,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Install libquil
         run: |
-          curl -fsSL "https://raw.githubusercontent.com/rigetti/libquil/$LIBQUIL_INSTALL_REF/scripts/install.sh" \
+          curl -fsSL "https://raw.githubusercontent.com/rigetti/libquil/v$LIBQUIL_VERSION/scripts/install.sh" \
             | sudo -E bash -s -- --install-deps "$LIBQUIL_VERSION"
       - name: Run tests
         run: |
