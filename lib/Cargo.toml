@@ -15,20 +15,20 @@ readme = "../README.md"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-libc = "0.2"
-libloading = "0.8.0"
-num-complex = "0.4.4"
-serde_json = "1.0.105"
-thiserror = "2.0"
-paste = "1.0.6"
+libc = { workspace = true }
+libloading = { workspace = true }
+num-complex = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+paste = { workspace = true }
 
 [build-dependencies]
-cc = { version = "1.0", features = ["parallel"] }
-pkg-config = "0.3"
-bindgen = "0.72"
-thiserror = "2.0"
+cc = { workspace = true, features = ["parallel"] }
+pkg-config = { workspace = true }
+bindgen = { workspace = true }
+thiserror = { workspace = true }
 
 [dev-dependencies]
-assert2 = "0.3.11"
-quil-rs = "0.32.0"
+assert2 = { workspace = true }
+quil-rs = { workspace = true }
 

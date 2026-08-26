@@ -1,3 +1,21 @@
 [workspace]
 resolver = "2"
 members = ["lib", "python"]
+
+[workspace.dependencies]
+assert2 = "0.3.11"
+bindgen = "0.72"
+cc = "1.0"
+libc = "0.2"
+libloading = "0.8.0"
+libquil-sys = { path = "lib" }
+num-complex = "0.4.4"
+numpy = "0.20"
+paste = "1.0.6"
+pkg-config = "0.3"
+pyo3 = "0.20"
+pyo3-build-config = "0.20"
+quil-rs = "0.32.0"
+rigetti-pyo3 = "0.4"
+serde_json = "1.0.105"
+thiserror = "2.0"
