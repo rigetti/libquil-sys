@@ -86,12 +86,7 @@ fn get_include_paths(libquil_header_path: &std::path::Path) -> Vec<PathBuf> {
 }
 
 fn main() {
-    // Cargo prints a build script's error with Debug, which would hide the
-    // explanation these errors carry, so report it and exit rather than returning it.
-    if let Err(error) = build() {
-        eprintln!("\nerror: {error}\n");
-        std::process::exit(1);
-    }
+    build().unwrap()
 }
 
 fn build() -> Result<(), Error> {
