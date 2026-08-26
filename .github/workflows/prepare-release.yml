@@ -20,10 +20,6 @@ jobs:
     - name: Install Knope
       uses: knope-dev/action@v2.1.2
       with:
-        # 0.23 is needed for `--prerelease-label` and for tagging the ref being
-        # released. 0.10 tagged the default branch instead, so a prerelease cut from
-        # a branch produced a tag pointing at main's version, and the publish job
-        # then tried to republish that already-released version.
         version: 0.23.0 # Test before updating, breaking changes likely: https://github.com/knope-dev/action#install-latest-version
     - run: |
         git config --global user.name "${{ github.triggering_actor }}"

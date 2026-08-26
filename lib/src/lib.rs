@@ -23,11 +23,6 @@ pub enum Error {
 }
 
 /// Prepares libquil for use. No-op after the first call.
-///
-/// There is no core file to locate and no initialization call to make: the Lisp
-/// image is brought up by a constructor in the libsbcl_librarian runtime when it is
-/// loaded, and libquil's own constructor then loads its embedded FASL bundles into
-/// that image. All this function does is make libquil's symbols globally visible.
 pub(crate) fn init_libquil() -> Result<(), Error> {
     let library_name = match std::env::consts::OS {
         "linux" => Ok("libquil.so".to_string()),
