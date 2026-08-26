@@ -8,7 +8,7 @@ on:
 
 env:
   # The libquil release these bindings are built against.
-  LIBQUIL_VERSION: "0.4.0"
+  LIBQUIL_VERSION: "0.4.1"
 
 jobs:
   test-linux:
