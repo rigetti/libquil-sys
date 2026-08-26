@@ -1,27 +1,31 @@
-use pyo3::{exceptions::PyValueError, prelude::*, types::PyBool};
-use rigetti_pyo3::{py_wrap_data_struct, PyWrapper, ToPythonError};
+use pyo3::{exceptions::PyValueError, prelude::*};
 
-#[derive(Clone)]
-pub struct CompileOptions {
+#[pyclass(name = "CompileOptions", skip_from_py_object)]
+#[derive(Debug, Clone, Default)]
+pub struct PyCompileOptions {
     pub protoquil: Option<bool>,
-}
-
-py_wrap_data_struct! {
-    PyCompileOptions(CompileOptions) as "CompileOptions" {
-        protoquil: Option<bool> => Option<Py<PyBool>>
-    }
 }
 
 #[pymethods]
 impl PyCompileOptions {
     #[new]
-    pub fn new(py: Python<'_>, protoquil: Option<Py<PyBool>>) -> PyResult<Self> {
-        let protoquil = protoquil.map(|p| p.is_true(py)).transpose()?;
-        Ok(Self(CompileOptions { protoquil }))
+    #[pyo3(signature = (protoquil=None))]
+    pub fn new(protoquil: Option<bool>) -> Self {
+        Self { protoquil }
+    }
+
+    #[getter]
+    pub fn get_protoquil(&self) -> Option<bool> {
+        self.protoquil
+    }
+
+    #[setter]
+    pub fn set_protoquil(&mut self, protoquil: Option<bool>) {
+        self.protoquil = protoquil;
     }
 }
 
-#[pyclass(name = "CompilationMetadata")]
+#[pyclass(name = "CompilationMetadata", skip_from_py_object)]
 #[derive(Debug, Clone)]
 pub struct PyCompilationMetadata(libquil_sys::quilc::CompilationMetadata);
 
@@ -94,14 +98,14 @@ pub fn compile(
     chip: &crate::chip::PyChip,
     options: Option<&PyCompileOptions>,
 ) -> PyResult<PyCompilationResult> {
-    let protoquil = options.and_then(|e| e.as_inner().protoquil);
+    let protoquil = options.and_then(|e| e.protoquil);
 
     let compilation_result = if let Some(true) = protoquil {
-        libquil_sys::quilc::compile_protoquil(&program.as_inner().0, &chip.as_inner().0)
-            .map_err(|e| crate::RustLibquilQuilcError::from(e).to_py_err())?
+        libquil_sys::quilc::compile_protoquil(&program.0, &chip.0)
+            .map_err(|e| PyErr::from(crate::RustLibquilQuilcError::from(e)))?
     } else {
-        libquil_sys::quilc::compile_program(&program.as_inner().0, &chip.as_inner().0)
-            .map_err(|e| crate::RustLibquilQuilcError::from(e).to_py_err())?
+        libquil_sys::quilc::compile_program(&program.0, &chip.0)
+            .map_err(|e| PyErr::from(crate::RustLibquilQuilcError::from(e)))?
     };
 
     let metadata = compilation_result.metadata.map(PyCompilationMetadata);
